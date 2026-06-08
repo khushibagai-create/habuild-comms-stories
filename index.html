@@ -3,23 +3,54 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Stories Card-Stack — Habuild Comms-in-App</title>
-<!-- Habuild Stories Prototype — 5 comms patterns
-     2026-05-29 (Fri)
-     Demonstrates how the Stories surface adapts to 5 distinct communication intents:
-     1. Enroll · Kids Camp (pre-camp announcement)
-     2. Daily update · Surya Namaskar Day 3 (already enrolled)
-     3. Enroll · Women's Health Workshop
-     4. Recovery · Missed Session Recording
-     5. Seasonal tool · Mother's Day Card -->
+<title>Stories — Manish's Final Card Designs · Habuild</title>
+<!-- 09f Stories — Manish final card visual language
+     Date: 2026-06-08
+     Home screen preserved from 09e (sage hero, day count, blue hearts streak,
+     live banner, story rail, upcoming today, watch recorded section, bottom nav).
+     Card overlay REPLACED with Manish's final visual treatment:
+     - White rounded card with light blue gradient at top
+     - Dark slate INFO PILL with red dot
+     - Dark navy primary CTA
+     - 7 card components: A Hero Announcement, B Day-list, C Numbered timeline,
+       D Day-tab schedule, E Day-arc, F Nutrition guidance, G Recording.
+-->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
+    /* Manish-spec card defaults — every story's .stack-card overrides --p-* per palette
+       and the card styles below use var(--p-*) where the palette should drive color. */
+    --m-card-bg: #FFFFFF;
+    --m-card-top: #E0F2FE;       /* light blue gradient top */
+    --m-title: #0F172A;          /* dark navy */
+    --m-sub: #64748B;            /* slate gray */
+    --m-cta: #0C4A6E;            /* dark navy CTA */
+    --m-cta-hover: #0A3D5C;
+    --m-pill-bg: #1F2937;        /* dark slate INFO PILL */
+    --m-pill-dot: #DC2625;       /* red dot */
+    --m-blue: #0284C7;
+    --m-blue-soft: #DBEAFE;      /* today highlight bg */
+    --m-blue-border: #93C5FD;
+    --m-gold: #C8A04A;
+    --m-gold-soft: #F5E8C7;
+
+    /* 4-palette theme tokens (default = Blue from Manish's Figma).
+       Stack cards override these via inline style based on story.palette. */
+    --p-cta:           #0A6598;
+    --p-dark:          #0369A1;
+    --p-mid:           #0281CA;
+    --p-light:         #1C7BB0;
+    --p-gradient-top:  #E0F2FE;
+    --p-stat-bg:       #EFF6FF;
+    --p-today-pill:    #0A6598;
+    --p-pill-text:     #FFFFFF;
+    --p-cta-text:      #FFFFFF;
+    --ring-color:      #0A6598;  /* story-ring stroke (overridden per story) */
+
     --primary-600: #0284C7;
     --primary-key: #0369A1;
-    --primary-800: #075985;
 
     --on-1: #0F172A;
     --on-2: #334155;
@@ -31,20 +62,22 @@
     --n-100: #F1F5F9;
 
     --white: #FFFFFF;
-    --muted: #F1F5F9;
     --outline: #E2E8F0;
 
-    --error: #DC2625;
-    --success: #16A34A;
-
-    --kids-accent: #C9924A;
-    --surya-accent: #B68A3C;
-    --women-accent: #B57894;
-    --missed-accent: #6B7C8E;
-    --mom-accent: #A88641;
+    /* Story rail accents (muted) */
+    --acc-marma: #6E7F95;        /* slate blue */
+    --acc-surya: #BFA063;        /* champagne */
+    --acc-kids: #B89465;         /* warm tan */
+    --acc-women: #B5879A;        /* dusty rose */
+    --acc-stress: #7B9079;       /* muted sage */
+    --acc-gut: #C0A05A;          /* muted gold */
+    --acc-iyd: #6E7A8C;          /* slate */
+    --acc-moms: #C99AA0;         /* soft rose */
+    --acc-recovery: #A3ABB5;     /* light gray */
+    --acc-2271: #B89A65;         /* muted gold */
+    --acc-reflect: #9C90B5;      /* muted lavender */
 
     --font: "Poppins", system-ui, sans-serif;
-
     --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-spring: cubic-bezier(0.4, 1.4, 0.4, 1);
   }
@@ -77,7 +110,6 @@
     border-radius: 999px;
     cursor: pointer;
     letter-spacing: 0.4px;
-    transition: background .15s;
     z-index: 1000;
   }
   .reset-btn:hover { background: rgba(255,255,255,0.16); }
@@ -104,7 +136,7 @@
   }
   .phone-inner::-webkit-scrollbar { display: none; }
 
-  /* Status bar inside the sage hero */
+  /* ---------- HERO (preserved from 09e) ---------- */
   .hero-status-bar {
     position: relative;
     z-index: 2;
@@ -127,13 +159,11 @@
   .hero-status-bar .battery::after { content: ""; position: absolute; right: -3px; top: 3px; width: 2px; height: 5px; background: currentColor; border-radius: 0 1px 1px 0; }
   .hero-status-bar .battery::before { content: ""; position: absolute; left: 1px; top: 1px; bottom: 1px; width: 70%; background: currentColor; border-radius: 1px; }
 
-  /* Hero — Sage & Stone (Calm / Aesop / spa-inspired) */
   .hero-section {
     position: relative;
     margin: 0 0 20px;
     background: linear-gradient(163deg, #EDF1EA 0%, #DDE5DB 55%, #CFD9CC 100%);
     border-radius: 0 0 32px 32px;
-    border: none;
     border-bottom: 1px solid rgba(15, 23, 42, 0.06);
     box-shadow: 0 4px 12px rgba(31, 42, 29, 0.06);
     overflow: hidden;
@@ -141,10 +171,8 @@
   .hero-section::before {
     content: "";
     position: absolute;
-    top: -100px;
-    right: -60px;
-    width: 220px;
-    height: 220px;
+    top: -100px; right: -60px;
+    width: 220px; height: 220px;
     border-radius: 50%;
     background: radial-gradient(closest-side, rgba(255, 248, 232, 0.55), transparent 72%);
     pointer-events: none;
@@ -169,11 +197,9 @@
   }
   .greeting-text { display: flex; flex-direction: column; gap: 2px; }
   .greeting-hello { font-size: 22px; font-weight: 600; color: #2D3A2B; line-height: 1.15; letter-spacing: -0.3px; }
-  .greeting-name { font-size: 13px; font-weight: 500; color: rgba(45, 58, 43, 0.65); line-height: 1.3; margin-top: 3px; letter-spacing: 0.1px; }
+  .greeting-name { font-size: 13px; font-weight: 500; color: rgba(45, 58, 43, 0.65); line-height: 1.3; margin-top: 3px; }
   .yoga-days { text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
   .yoga-days .count { font-size: 44px; font-weight: 600; color: #1F2A1D; line-height: 0.92; letter-spacing: -1.6px; font-variant-numeric: tabular-nums; }
-  .yoga-days .accent-bar { width: 20px; height: 1px; background: rgba(31, 42, 29, 0.32); margin: 9px 0 6px auto; }
-  .yoga-days .label { font-size: 9.5px; font-weight: 600; color: rgba(31, 42, 29, 0.55); letter-spacing: 2px; text-transform: uppercase; }
   .yoga-days .accent-bar { width: 22px; height: 1.5px; background: #CBD5E1; margin: 8px 0 6px; margin-left: auto; border-radius: 1px; }
   .yoga-days .label { font-size: 10px; font-weight: 700; color: #64748B; letter-spacing: 1.6px; text-transform: uppercase; }
 
@@ -199,7 +225,6 @@
   }
   .story-item:active .story-ring { transform: scale(0.94); }
 
-  /* Segmented ring SVG sits on top of the ring */
   .ring-svg {
     position: absolute;
     inset: 0;
@@ -214,13 +239,9 @@
     stroke-linecap: round;
     transition: stroke 200ms ease;
   }
-  /* Accent stroke colors per story type */
-  .story-ring.kids-ring   .ring-svg circle { stroke: #B07C2D; }
-  .story-ring.surya-ring  .ring-svg circle { stroke: #8B5E2F; }
-  .story-ring.women-ring  .ring-svg circle { stroke: #8C5570; }
-  .story-ring.missed-ring .ring-svg circle { stroke: #475569; }
-  .story-ring.mom-ring    .ring-svg circle { stroke: #8C6628; }
-  .story-ring.viewed      .ring-svg circle { stroke: #CBD5E1; }
+  /* Story ring strokes use palette CTA color, injected via inline --ring-color */
+  .story-ring .ring-svg circle { stroke: var(--ring-color); }
+  .story-ring.viewed .ring-svg circle { stroke: #CBD5E1; }
 
   .story-ring.viewed .story-thumb {
     opacity: 0.6;
@@ -244,18 +265,23 @@
   .story-thumb {
     width: 100%; height: 100%;
     border-radius: 50%;
-    position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .story-thumb svg { width: 60%; height: 60%; display: block; }
-  .story-thumb.kids-thumb { background: linear-gradient(160deg, #FCE9CC, #E9C290); }
-  .story-thumb.surya-thumb { background: linear-gradient(160deg, #FBEFCB, #E5C97B); }
-  .story-thumb.women-thumb { background: linear-gradient(160deg, #F6E0E5, #DDB7C2); }
-  .story-thumb.missed-thumb { background: linear-gradient(160deg, #E1E7EE, #B6C0CD); }
-  .story-thumb.mom-thumb { background: linear-gradient(160deg, #F4E7C2, #D7B873); }
+  .story-thumb svg { width: 58%; height: 58%; display: block; }
+  .story-thumb.t-marma     { background: linear-gradient(160deg, #D9E1EC, #97A8BD); }
+  .story-thumb.t-surya     { background: linear-gradient(160deg, #F3E5C2, #D5B779); }
+  .story-thumb.t-kids      { background: linear-gradient(160deg, #F1E2C7, #C8A879); }
+  .story-thumb.t-women     { background: linear-gradient(160deg, #EDDCE2, #C9A2B0); }
+  .story-thumb.t-stress    { background: linear-gradient(160deg, #DEE7DC, #A8BFA4); }
+  .story-thumb.t-gut       { background: linear-gradient(160deg, #F2E4C2, #D4B374); }
+  .story-thumb.t-iyd       { background: linear-gradient(160deg, #DDE2EA, #A5B0C2); }
+  .story-thumb.t-moms      { background: linear-gradient(160deg, #F4DCE0, #D9AFB6); }
+  .story-thumb.t-recovery  { background: linear-gradient(160deg, #E7EAEE, #B7BFC9); }
+  .story-thumb.t-2271      { background: linear-gradient(160deg, #F0E0BC, #C7A66B); }
+  .story-thumb.t-reflect   { background: linear-gradient(160deg, #E5DEEF, #B7A8D0); }
 
   .story-label {
     font-size: 11.5px;
@@ -280,9 +306,7 @@
   .streak-card::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 22px;
-    right: 22px;
+    top: 0; left: 22px; right: 22px;
     height: 1px;
     background: linear-gradient(to right, transparent, #E2E8F0, transparent);
   }
@@ -294,8 +318,7 @@
     top: -2px;
     left: 50%;
     transform: translateX(-50%);
-    width: 44px;
-    height: 44px;
+    width: 44px; height: 44px;
     border-radius: 50%;
     background: radial-gradient(closest-side, rgba(2,132,199,0.18), transparent 70%);
     animation: streakTodayRipple 2.4s ease-in-out infinite;
@@ -328,15 +351,39 @@
 
   .live-banner {
     margin: 0 20px 20px;
-    width: 335px;
     border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
-    display: block;
-    line-height: 0;
+    background: linear-gradient(135deg, #FAEFCB 0%, #E5C97B 100%);
+    height: 120px;
+    position: relative;
   }
-  .live-banner-img { width: 100%; height: auto; display: block; }
+  .live-banner-inner {
+    position: absolute;
+    inset: 0;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .live-banner-tag {
+    align-self: flex-start;
+    background: rgba(15, 23, 42, 0.78);
+    color: white;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 1.2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .live-banner-tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #DC2625; animation: livePulse 1.4s ease-in-out infinite; }
+  @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .live-banner-title { font-size: 17px; font-weight: 700; color: #4A3514; line-height: 1.2; }
+  .live-banner-sub { font-size: 12px; font-weight: 500; color: #6B5320; margin-top: 2px; }
 
   .upcoming-list { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 12px; }
   .upcoming-item {
@@ -348,12 +395,9 @@
     align-items: center;
     gap: 12px;
     cursor: pointer;
-    transition: transform .15s var(--ease-std);
-    animation: slideIn .4s var(--ease-spring);
     overflow: hidden;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   }
-  @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   .upcoming-item:active { transform: scale(0.98); }
   .upcoming-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-right: 8px; }
   .upcoming-time { font-size: 13px; font-weight: 500; color: var(--on-3); display: flex; align-items: center; gap: 6px; }
@@ -364,7 +408,6 @@
     width: 110px;
     height: 92px;
     flex-shrink: 0;
-    background: linear-gradient(163deg, #DCEDFF 0%, #BFD9FF 100%);
     position: relative;
     overflow: hidden;
     align-self: stretch;
@@ -374,26 +417,73 @@
     justify-content: center;
   }
   .upcoming-image svg { width: 56%; height: 56%; }
-  .upcoming-image.kids { background: linear-gradient(163deg, #FCE9CC 0%, #E9C290 100%); }
-  .upcoming-image.surya { background: linear-gradient(163deg, #FBEFCB 0%, #E5C97B 100%); }
-  .upcoming-image.women { background: linear-gradient(163deg, #F6E0E5 0%, #DDB7C2 100%); }
-  .upcoming-image.box { background: linear-gradient(163deg, #DCEDFF 0%, #93C5FD 100%); }
-  .upcoming-image.daily { background: linear-gradient(163deg, #DCEDFF 0%, #BFD9FF 100%); }
-  .upcoming-image.missed { background: linear-gradient(163deg, #E2E8F0 0%, #94A3B8 100%); }
-  .upc-expires-chip {
+  .upcoming-image.kids   { background: linear-gradient(163deg, #F1E2C7 0%, #C8A879 100%); }
+  .upcoming-image.surya  { background: linear-gradient(163deg, #F3E5C2 0%, #D5B779 100%); }
+  .upcoming-image.women  { background: linear-gradient(163deg, #EDDCE2 0%, #C9A2B0 100%); }
+  .upcoming-image.daily  { background: linear-gradient(163deg, #DCEDFF 0%, #BFD9FF 100%); }
+  .upcoming-image.box    { background: linear-gradient(163deg, #DCEDFF 0%, #93C5FD 100%); }
+  .upcoming-image.marma  { background: linear-gradient(163deg, #D9E1EC 0%, #97A8BD 100%); }
+
+  /* ---------- WATCH RECORDED SECTION (Netflix-style) ---------- */
+  .recorded-rail {
+    display: flex;
+    gap: 12px;
+    padding: 0 20px 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .recorded-rail::-webkit-scrollbar { display: none; }
+  .recorded-card {
+    flex-shrink: 0;
+    width: 150px;
+    cursor: pointer;
+  }
+  .recorded-thumb {
+    width: 150px;
+    height: 90px;
+    border-radius: 12px;
+    background: linear-gradient(160deg, #DDE7DC, #A8BFA4);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .recorded-thumb.t1 { background: linear-gradient(160deg, #F3E5C2, #D5B779); }
+  .recorded-thumb.t2 { background: linear-gradient(160deg, #D9E1EC, #97A8BD); }
+  .recorded-thumb.t3 { background: linear-gradient(160deg, #EDDCE2, #C9A2B0); }
+  .recorded-thumb svg.play-svg {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 50%;
+    padding: 6px;
+  }
+  .recorded-expiry {
     position: absolute;
-    top: 8px;
-    left: 8px;
+    top: 6px; left: 6px;
     background: rgba(15, 23, 42, 0.78);
     color: white;
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 700;
-    letter-spacing: 0.3px;
     padding: 3px 7px;
     border-radius: 4px;
-    backdrop-filter: blur(4px);
+    letter-spacing: 0.3px;
+  }
+  .recorded-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--on-1);
+    margin-top: 7px;
+    line-height: 1.25;
+  }
+  .recorded-sub {
+    font-size: 11px;
+    color: var(--on-3);
+    margin-top: 2px;
+    line-height: 1.25;
   }
 
+  /* ---------- BOTTOM NAV ---------- */
   .bottom-nav {
     position: absolute;
     bottom: 0; left: 0; right: 0;
@@ -414,71 +504,74 @@
   .nav-tab svg { stroke: currentColor; stroke-width: 2; fill: none; }
   .nav-tab span { font-size: 10px; font-weight: 500; }
 
+  /* ==========================================================
+     STORY OVERLAY — Manish's final card design language
+     ========================================================== */
   .cardstack-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 100;
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding-top: 36px;
-    padding-bottom: 24px;
+    justify-content: flex-start;
+    padding-top: 16px;
+    padding-bottom: 20px;
     opacity: 0;
     transition: opacity .25s var(--ease-std);
   }
   .cardstack-overlay.active { display: flex; opacity: 1; }
 
-  .cardstack-close {
-    position: absolute;
-    top: 14px; right: 14px;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    color: white;
-    z-index: 110;
-  }
-  .cardstack-close:hover { background: rgba(255,255,255,0.25); }
-  .cardstack-close svg { stroke: white; stroke-width: 2.5; fill: none; }
-
   .cardstack-header {
-    position: absolute;
-    top: 22px; left: 18px;
+    width: calc(100% - 32px);
+    margin: 0 16px 12px;
     color: white;
     display: flex;
     align-items: center;
     gap: 10px;
     z-index: 105;
+    padding: 8px 0;
   }
   .cardstack-author-avatar {
     width: 32px; height: 32px;
     border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.4);
+    border: 2px solid rgba(255,255,255,0.35);
     display: flex; align-items: center; justify-content: center;
-    color: white; font-weight: 700; font-size: 12px;
-    background: linear-gradient(135deg, #0ea5e9, #6366f1);
+    color: white; font-weight: 700; font-size: 11px;
+    background: linear-gradient(135deg, #B89465, #8A6A35);
+    flex-shrink: 0;
   }
-  .cardstack-author-name { font-size: 12px; font-weight: 600; line-height: 1.1; }
-  .cardstack-author-time { font-size: 10px; opacity: 0.75; line-height: 1.1; }
+  .cardstack-author-text { flex: 1; min-width: 0; }
+  .cardstack-author-name { font-size: 13px; font-weight: 700; line-height: 1.15; }
+  .cardstack-author-time { font-size: 11px; opacity: 0.78; line-height: 1.15; margin-top: 1px; }
+  .cardstack-close {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.22);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: white;
+    flex-shrink: 0;
+  }
+  .cardstack-close:hover { background: rgba(255,255,255,0.28); }
+  .cardstack-close svg { stroke: white; stroke-width: 2.5; fill: none; }
 
   .stack-container {
-    width: 340px;
-    height: 580px;
+    width: 327px;
+    flex: 1;
+    max-height: 612px;
     position: relative;
-    margin-top: 36px;
   }
 
   .stack-card {
     position: absolute;
     inset: 0;
-    background: white;
-    border-radius: 24px;
+    background: var(--m-card-bg);
+    border-radius: 22px;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 2px 6px rgba(0,0,0,0.15);
     display: flex;
@@ -492,79 +585,713 @@
   .stack-card.dragging { transition: none; cursor: grabbing; }
 
   .stack-card[data-pos="current"] { transform: translateX(0) translateY(0) scale(1) rotate(0deg); opacity: 1; z-index: 5; }
-  .stack-card[data-pos="next"]    { transform: translateY(12px) scale(0.95); opacity: 0.7; z-index: 4; pointer-events: none; }
-  .stack-card[data-pos="next2"]   { transform: translateY(22px) scale(0.9); opacity: 0.4; z-index: 3; pointer-events: none; }
-  .stack-card[data-pos="hidden"]  { transform: translateY(32px) scale(0.85); opacity: 0; z-index: 2; pointer-events: none; }
+  .stack-card[data-pos="next"]    { transform: translateY(10px) scale(0.96); opacity: 0.65; z-index: 4; pointer-events: none; }
+  .stack-card[data-pos="next2"]   { transform: translateY(20px) scale(0.92); opacity: 0.35; z-index: 3; pointer-events: none; }
+  .stack-card[data-pos="hidden"]  { transform: translateY(28px) scale(0.88); opacity: 0; z-index: 2; pointer-events: none; }
   .stack-card[data-pos="gone"]    { transform: translateX(-120%) rotate(-12deg); opacity: 0; z-index: 1; pointer-events: none; }
 
+  /* Palette gradient at top of every card (replaces fixed blue) */
+  .stack-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 38%;
+    background: linear-gradient(180deg, var(--p-gradient-top) 0%, rgba(255, 255, 255, 0.4) 60%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .stack-card.has-hero-image::before,
+  .stack-card.has-completion-hero::before { display: none; }
+
   .card-body {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0;
+    z-index: 1;
   }
   .card-body::-webkit-scrollbar { display: none; }
-  .card-pad { padding: 20px 22px; }
 
-  .card-pill {
+  /* Hero image area (top portion of card) */
+  .card-hero-img {
+    width: 100%;
+    height: 168px;
+    display: block;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-hero-img svg { width: 100%; height: 100%; display: block; }
+
+  .card-pad { padding: 16px 18px 18px; }
+
+  /* INFO PILL — palette dark bg, red dot stays red across palettes */
+  .info-pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--kids-accent);
-    color: white;
-    padding: 5px 11px;
+    background: var(--p-dark);
+    color: var(--p-pill-text);
+    padding: 5px 11px 5px 9px;
     border-radius: 999px;
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.8px;
-    align-self: flex-start;
+    letter-spacing: 0.7px;
     text-transform: uppercase;
+    margin-bottom: 10px;
   }
-  .card-pill.kids { background: var(--kids-accent); }
-  .card-pill.surya { background: var(--surya-accent); }
-  .card-pill.women { background: var(--women-accent); }
-  .card-pill.missed { background: var(--missed-accent); }
-  .card-pill.mom { background: var(--mom-accent); }
+  .info-pill::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #EF4444;
+    flex-shrink: 0;
+  }
 
+  /* Title uses palette dark shade, not pure black, for warmth */
   .card-title {
-    font-size: 21px;
+    font-size: 23px;
     font-weight: 700;
-    color: var(--on-1);
-    line-height: 1.18;
-    margin-top: 8px;
-    letter-spacing: -0.3px;
+    color: var(--p-dark);
+    line-height: 1.15;
+    letter-spacing: -0.4px;
   }
   .card-sub {
     font-size: 13.5px;
     font-weight: 500;
-    color: var(--on-3);
+    color: var(--m-sub);
     line-height: 1.45;
-    margin-top: 4px;
-  }
-  .card-when-line {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--on-2);
-    margin-top: 10px;
-    padding: 8px 12px;
-    background: var(--n-100);
-    border-radius: 8px;
-    display: inline-block;
-    align-self: flex-start;
+    margin-top: 6px;
   }
 
-  .card-cta-row {
-    padding: 14px 22px 22px;
+  /* Expert chip — avatar + name */
+  .expert-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .expert-avatar {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #94A3B8, #475569);
+    color: white;
+    font-size: 9.5px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .expert-name {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--on-2);
+  }
+
+  /* Meta row — 3 inline stats (Time / Duration / Program), palette-tinted */
+  .meta-row {
+    display: flex;
+    margin-top: 14px;
+    border: 1px solid color-mix(in srgb, var(--p-mid) 18%, white);
+    background: var(--p-stat-bg);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .meta-col {
+    flex: 1;
+    padding: 9px 8px;
+    text-align: center;
+    border-right: 1px solid color-mix(in srgb, var(--p-mid) 18%, white);
+  }
+  .meta-col:last-child { border-right: none; }
+  .meta-val {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--m-title);
+    line-height: 1.15;
+  }
+  .meta-lbl {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--m-sub);
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* Bullets list (component A) */
+  .bullets {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bullets-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--m-title);
+    margin-bottom: 2px;
+  }
+  .bullet-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--on-2);
+    line-height: 1.4;
+  }
+  .bullet-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--p-mid);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  /* Inline secondary link */
+  .inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--p-cta);
+    cursor: pointer;
+  }
+  .inline-link svg { stroke: var(--p-cta); stroke-width: 2; fill: none; }
+
+  /* Component B — Day-list */
+  .day-list {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    border-top: 1px solid #EEF2F7;
+  }
+  .day-row {
+    padding: 10px 4px;
+    border-bottom: 1px solid #EEF2F7;
+    position: relative;
+  }
+  .day-row.today-hl {
+    background: var(--p-stat-bg);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 2px 0;
+    border-bottom: none;
+  }
+  .day-row-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--m-title);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.2;
+  }
+  .day-row-author {
+    font-size: 11.5px;
+    color: var(--m-sub);
+    margin-top: 2px;
+    line-height: 1.2;
+  }
+  .today-pill {
+    background: var(--p-today-pill);
+    color: var(--p-pill-text);
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 8px 2px 6px;
+    border-radius: 999px;
+    letter-spacing: 0.4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  /* Component C — Numbered timeline */
+  .timeline {
+    margin-top: 14px;
+    position: relative;
+  }
+  .tl-item {
+    display: flex;
+    gap: 12px;
+    padding-bottom: 14px;
+    position: relative;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-num {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1.8px solid var(--p-mid);
+    color: var(--p-mid);
+    font-size: 13px;
+    font-weight: 700;
     background: white;
-    border-top: 1px solid var(--n-200);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .tl-line {
+    position: absolute;
+    left: 14.5px;
+    top: 30px;
+    bottom: -4px;
+    width: 1.5px;
+    background: color-mix(in srgb, var(--p-mid) 30%, white);
+    z-index: 0;
+  }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-text {
+    flex: 1;
+    padding-top: 3px;
+  }
+  .tl-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--m-title);
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tl-sub {
+    font-size: 11.5px;
+    color: var(--m-sub);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+  .tl-item.today-hl {
+    background: var(--p-stat-bg);
+    border-radius: 12px;
+    padding: 10px 12px 10px 8px;
+    margin: -4px 0 10px -4px;
+  }
+  .tl-item.today-hl .tl-line { top: 36px; left: 18.5px; }
+
+  /* Component D — Day-tab schedule */
+  .day-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-left: -4px;
+    padding-left: 4px;
+  }
+  .day-tabs::-webkit-scrollbar { display: none; }
+  .day-tab {
+    flex-shrink: 0;
+    padding: 7px 13px;
+    border: 1.5px solid var(--n-200);
+    background: white;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--m-sub);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .day-tab.done { background: var(--p-stat-bg); color: var(--m-title); }
+  .day-tab.done::after {
+    content: "";
+    width: 12px; height: 12px;
+    background: var(--p-cta);
+    border-radius: 50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: 8px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .day-tab.locked { color: #94A3B8; }
+  .day-tab.locked::after {
+    content: "";
+    width: 11px; height: 11px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='11' width='16' height='9' rx='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .day-tab.current {
+    border: 2px solid var(--p-cta);
+    color: var(--p-cta);
+    background: white;
+  }
+
+  .time-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--m-sub);
+  }
+  .time-row svg { stroke: var(--m-sub); stroke-width: 2; fill: none; }
+
+  /* Component E — Day-arc */
+  .arc-card {
+    margin-top: 14px;
+    padding: 14px 14px 16px;
+    background: #F4F7FB;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+  }
+  .arc-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--m-sub);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .arc-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 4px;
+    position: relative;
+  }
+  .arc-cell {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+  }
+  .arc-circle {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11.5px;
+    font-weight: 700;
+    background: white;
+    border: 2px solid #E2E8F0;
+    color: #94A3B8;
+  }
+  .arc-circle.done {
+    background: var(--p-cta);
+    border-color: var(--p-cta);
+    color: white;
+  }
+  .arc-circle.done::after {
+    content: "";
+    width: 14px; height: 14px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .arc-circle.done { font-size: 0; }
+  .arc-circle.today {
+    border: 2.5px dashed var(--p-cta);
+    background: color-mix(in srgb, var(--p-cta) 8%, transparent);
+    color: var(--p-dark);
+  }
+  .arc-label-lbl {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #94A3B8;
+  }
+  .arc-cell.done-cell .arc-label-lbl { color: var(--p-dark); }
+  .arc-cell.today-cell .arc-label-lbl { color: var(--p-dark); }
+  .arc-connector {
+    position: absolute;
+    top: 18px;
+    left: 8%;
+    right: 8%;
+    height: 1.5px;
+    background: #E2E8F0;
+    z-index: 0;
+  }
+  .arc-connector-fill {
+    position: absolute;
+    top: 18px;
+    left: 8%;
+    height: 1.5px;
+    background: var(--p-cta);
+    z-index: 0;
+  }
+
+  /* Component F — Nutrition guidance */
+  .nutri-section {
+    margin-top: 14px;
+  }
+  .nutri-section-title {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--m-sub);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nutri-section-title::before {
+    content: "";
+    width: 3px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--p-cta);
+  }
+  .nutri-text {
+    font-size: 12.5px;
+    color: var(--on-2);
+    line-height: 1.45;
+  }
+  .nutri-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .nutri-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 9px 11px;
+    background: #F8FBF8;
+    border: 1px solid #E0EDE0;
+    border-radius: 10px;
+  }
+  .nutri-row.avoid {
+    background: #FBF6F4;
+    border-color: #F0DDD7;
+  }
+  .nutri-check {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #6B9D6B;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nutri-check::after {
+    content: "";
+    width: 9px; height: 9px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .nutri-row.avoid .nutri-check { background: #C26B57; }
+  .nutri-row.avoid .nutri-check::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+  }
+  .nutri-row-text { flex: 1; min-width: 0; }
+  .nutri-row-name {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--m-title);
+    line-height: 1.2;
+  }
+  .nutri-row-desc {
+    font-size: 11px;
+    color: var(--m-sub);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  /* Component G — Recording / video */
+  .video-thumb {
+    width: 100%;
+    height: 168px;
+    position: relative;
+    background: linear-gradient(160deg, #E7EAEE, #B7BFC9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .video-thumb svg.bg-decoration {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .video-play-btn {
+    position: relative;
+    z-index: 2;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  }
+  .video-play-btn svg {
+    width: 22px; height: 22px;
+    fill: var(--p-cta);
+  }
+  .video-duration-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: rgba(15, 23, 42, 0.85);
+    color: white;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 6px;
+    z-index: 2;
+  }
+
+  /* Steps — for mass event card 2 (3 steps) */
+  /* Reuses timeline component */
+
+  /* Card 3 — "Save your spot" simple confirmation */
+  .confirm-block {
+    margin-top: 16px;
+    padding: 18px 16px;
+    background: var(--p-stat-bg);
+    border-radius: 14px;
+    text-align: center;
+  }
+  .confirm-emoji {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid color-mix(in srgb, var(--p-mid) 25%, white);
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .confirm-emoji svg { width: 28px; height: 28px; stroke: var(--p-cta); stroke-width: 2; fill: none; }
+  .confirm-line {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--m-title);
+    line-height: 1.35;
+  }
+  .confirm-sub {
+    font-size: 11.5px;
+    color: var(--m-sub);
+    margin-top: 5px;
+    line-height: 1.35;
+  }
+
+  /* Reflection prompts (June reflection card 2) */
+  .prompt-list {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .prompt-row {
+    display: flex;
+    gap: 10px;
+    padding: 11px 12px;
+    background: #F4F0F9;
+    border: 1px solid #E1D7EE;
+    border-radius: 11px;
+  }
+  .prompt-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--p-cta);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .prompt-text {
+    flex: 1;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--on-2);
+    line-height: 1.4;
+  }
+
+  /* Milestone hero (2271 days) */
+  .milestone-hero {
+    position: relative;
+    padding: 22px 18px 18px;
+    background: linear-gradient(160deg, #F2E4C2 0%, #C7A66B 100%);
+    text-align: center;
+    overflow: hidden;
+  }
+  .milestone-hero::before {
+    content: "";
+    position: absolute;
+    top: -40px; left: -40px;
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255,255,255,0.4), transparent 70%);
+  }
+  .milestone-hero::after {
+    content: "";
+    position: absolute;
+    bottom: -50px; right: -30px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255,255,255,0.3), transparent 70%);
+  }
+  .milestone-count {
+    position: relative;
+    font-size: 56px;
+    font-weight: 700;
+    color: #6B4F1E;
+    letter-spacing: -2.5px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .milestone-label {
+    position: relative;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8A6A2E;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .milestone-stats {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    padding: 12px 0 4px;
+    border-top: 1px solid rgba(107, 79, 30, 0.18);
+    position: relative;
+  }
+  .milestone-stat-col { text-align: center; }
+  .milestone-stat-val {
+    font-size: 20px;
+    font-weight: 700;
+    color: #6B4F1E;
+    letter-spacing: -0.5px;
+  }
+  .milestone-stat-lbl {
+    font-size: 9px;
+    font-weight: 700;
+    color: #8A6A2E;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* CTA row */
+  .card-cta-row {
+    padding: 14px 18px 18px;
+    background: white;
+    border-top: 1px solid #EEF2F7;
+    position: relative;
+    z-index: 1;
   }
   .card-cta-btn {
     width: 100%;
     height: 48px;
-    background: var(--primary-key);
-    color: white;
+    background: var(--p-cta);
+    color: var(--p-cta-text);
     border: none;
     border-radius: 999px;
     font-family: var(--font);
@@ -575,520 +1302,35 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    box-shadow: 0 6px 14px rgba(3, 105, 161, 0.3);
-    transition: transform .15s;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--p-cta) 30%, transparent);
+    transition: transform .15s, filter .15s;
   }
   .card-cta-btn:active { transform: scale(0.97); }
-  .card-cta-btn.kids { background: var(--kids-accent); box-shadow: 0 6px 14px rgba(201, 146, 74, 0.35); }
-  .card-cta-btn.surya { background: var(--surya-accent); box-shadow: 0 6px 14px rgba(182, 138, 60, 0.35); }
-  .card-cta-btn.women { background: var(--women-accent); box-shadow: 0 6px 14px rgba(181, 120, 148, 0.35); }
-  .card-cta-btn.missed { background: var(--primary-key); }
-  .card-cta-btn.mom { background: var(--mom-accent); box-shadow: 0 6px 14px rgba(168, 134, 65, 0.35); }
+  .card-cta-btn:hover { filter: brightness(0.92); }
+
   .card-cta-secondary {
     text-align: center;
     margin-top: 10px;
     font-size: 12.5px;
-    color: var(--on-3);
-    font-weight: 500;
+    color: var(--m-sub);
+    font-weight: 600;
     cursor: pointer;
-    padding: 4px;
+    padding: 2px;
   }
-  .card-cta-secondary:hover { color: var(--primary-key); }
+  .card-cta-secondary:hover { color: var(--p-cta); }
 
-  .card-hero-svg {
-    width: 100%;
-    height: 220px;
-    display: block;
-    flex-shrink: 0;
-    position: relative;
-    overflow: hidden;
-  }
-  .card-hero-svg svg { width: 100%; height: 100%; display: block; }
-  .card-hero-svg.ken-burns svg {
-    animation: kenBurns 14s ease-in-out infinite alternate;
-    transform-origin: center;
-  }
-  @keyframes kenBurns {
-    0% { transform: scale(1) translate(0,0); }
-    100% { transform: scale(1.06) translate(-1.5%, -1.5%); }
-  }
-
-  .day-list {
-    display: flex;
-    flex-direction: column;
-    margin-top: 16px;
-    border: 1px solid var(--n-200);
-    border-radius: 14px;
-    overflow: hidden;
-  }
-  .day-list-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--n-200);
-    background: white;
-  }
-  .day-list-row:last-child { border-bottom: none; }
-  .day-list-icon {
-    width: 26px; height: 26px;
-    border-radius: 7px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .day-list-icon svg { width: 15px; height: 15px; }
-  .day-list-icon.kids { background: #FCE9CC; }
-  .day-list-icon.women { background: #F6E0E5; }
-  .day-list-text { flex: 1; min-width: 0; }
-  .day-list-day {
-    font-size: 9.5px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    color: var(--on-3);
-    text-transform: uppercase;
-  }
-  .day-list-topic {
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--on-1);
-    line-height: 1.3;
-    margin-top: 1px;
-  }
-  .day-list-more {
-    padding: 8px 12px;
-    text-align: center;
-    font-size: 11.5px;
-    font-weight: 500;
-    color: var(--on-3);
-    background: var(--n-100);
-    font-style: italic;
-  }
-
-  /* Compact 10-day list — single-line rows with day pill + topic + expert */
-  .day-list.compact {
-    margin-top: 12px;
-  }
-  .day-list-row-compact {
-    display: grid;
-    grid-template-columns: 28px 1fr auto;
-    align-items: center;
-    gap: 10px;
-    padding: 7px 12px;
-    border-bottom: 1px solid var(--n-200);
-    background: white;
-  }
-  .day-list-row-compact:last-child { border-bottom: none; }
-  .dlc-day {
-    font-size: 10px;
-    font-weight: 700;
-    color: white;
-    background: var(--n-500);
-    width: 24px;
-    height: 22px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: -0.3px;
-  }
-  .dlc-day.kids { background: var(--kids-accent); }
-  .dlc-day.women { background: var(--women-accent); }
-  .dlc-day.surya { background: var(--surya-accent); }
-  .dlc-topic {
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--on-1);
-    line-height: 1.25;
-    min-width: 0;
-  }
-  .dlc-expert {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--on-3);
-    white-space: nowrap;
-  }
-
-  .experts-row { margin-top: 12px; }
-  .experts-row-label {
-    font-size: 10.5px;
-    font-weight: 600;
-    color: var(--on-3);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  .experts-avatars { display: flex; align-items: center; }
-  .expert-avatar {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    border: 2px solid white;
-    margin-left: -7px;
-    background: var(--n-300);
-    flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    color: white;
-    font-size: 10px;
-    font-weight: 700;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  }
-  .expert-avatar:first-child { margin-left: 0; }
-  .expert-avatar.e1 { background: linear-gradient(160deg, #C9924A, #8A6A35); }
-  .expert-avatar.e2 { background: linear-gradient(160deg, #B57894, #7A4F62); }
-  .expert-avatar.e3 { background: linear-gradient(160deg, #6B7C8E, #455260); }
-  .expert-avatar.e4 { background: linear-gradient(160deg, #B68A3C, #7A5C25); }
-  .expert-avatar.e5 { background: linear-gradient(160deg, #A88641, #6F5827); }
-  .experts-names {
-    margin-top: 10px;
-    font-size: 12px;
-    color: var(--on-3);
-    line-height: 1.5;
-  }
-
-  .surya-timeline {
-    display: flex;
-    flex-direction: column;
-    margin-top: 16px;
-    position: relative;
-  }
-  .surya-timeline::before {
-    content: "";
-    position: absolute;
-    left: 17px;
-    top: 14px;
-    bottom: 14px;
-    width: 1.5px;
-    background: var(--surya-accent);
-    opacity: 0.35;
-    border-radius: 1px;
-  }
-  .surya-tl-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 10px 0;
-    position: relative;
-  }
-  .surya-tl-dot {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: white;
-    border: 1.5px solid var(--surya-accent);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 1;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: var(--surya-accent);
-  }
-  .surya-tl-dot.focus {
-    background: var(--surya-accent);
-    color: white;
-    box-shadow: 0 0 0 4px rgba(182, 138, 60, 0.18);
-  }
-  .surya-tl-content { flex: 1; min-width: 0; padding-top: 6px; }
-  .surya-tl-step {
-    font-size: 13.5px;
-    font-weight: 600;
-    color: var(--on-1);
-    line-height: 1.3;
-  }
-  .surya-tl-step .focus-tag {
-    margin-left: 6px;
-    background: var(--surya-accent);
-    color: white;
-    font-size: 9px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 999px;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    vertical-align: 2px;
-  }
-  .surya-tl-meta {
-    font-size: 11.5px;
-    color: var(--on-3);
-    margin-top: 2px;
-    line-height: 1.4;
-  }
-
-  .surya-glyphs {
-    margin-top: 18px;
-    padding: 14px 12px;
-    background: #FDF6E3;
-    border: 1px solid #F0DDB0;
-    border-radius: 12px;
-  }
-  .surya-glyphs-label {
-    font-size: 10.5px;
-    font-weight: 700;
-    color: #8B6A20;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  .surya-glyphs-row {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-  }
-  .surya-glyph {
-    aspect-ratio: 1;
-    border-radius: 8px;
-    background: white;
-    border: 1px solid #F0DDB0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--surya-accent);
-  }
-  .surya-glyph svg { width: 70%; height: 70%; }
-  .surya-glyph.focus {
-    background: var(--surya-accent);
-    border-color: var(--surya-accent);
-    color: white;
-  }
-
-  .surya-progress {
-    margin-top: 16px;
-    padding: 14px 14px;
-    background: var(--n-100);
-    border-radius: 12px;
-  }
-  .surya-progress-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--on-3);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .surya-progress-track {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    position: relative;
-  }
-  .surya-progress-track::before {
-    content: "";
-    position: absolute;
-    left: 12px; right: 12px;
-    top: 13px;
-    height: 1.5px;
-    background: var(--n-300);
-  }
-  .surya-pnode {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    flex: 1;
-  }
-  .surya-pnode-circle {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    background: white;
-    border: 1.5px solid var(--n-300);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--n-400);
-    transition: all .2s var(--ease-spring);
-  }
-  .surya-pnode-circle.done {
-    background: var(--surya-accent);
-    border-color: var(--surya-accent);
-    color: white;
-  }
-  .surya-pnode-circle.done svg { stroke: white; stroke-width: 3; fill: none; }
-  .surya-pnode-circle.today {
-    background: white;
-    border: 2px dashed var(--surya-accent);
-    color: var(--surya-accent);
-    animation: suryaTodayPulse 1.8s ease-in-out infinite;
-  }
-  @keyframes suryaTodayPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(182,138,60,0.4); }
-    50%      { box-shadow: 0 0 0 5px rgba(182,138,60,0); }
-  }
-  .surya-pnode-label {
-    font-size: 9px;
-    font-weight: 600;
-    color: var(--n-500);
-    letter-spacing: 0.2px;
-    text-transform: uppercase;
-  }
-  .surya-pnode.today-node .surya-pnode-label { color: var(--surya-accent); }
-
-  .who-list {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .who-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 14px;
-    background: #FBF3F6;
-    border-radius: 10px;
-    border: 1px solid #F0DCE3;
-  }
-  .who-row-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--women-accent);
-    flex-shrink: 0;
-  }
-  .who-row-text {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--on-2);
-    line-height: 1.4;
-  }
-
-  /* Next-card hint — secondary action below the primary CTA */
-  .card-next-hint {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin: 10px auto 0;
-    padding: 10px 20px;
-    background: transparent;
-    border: 1px dashed var(--n-300);
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--on-2);
-    cursor: pointer;
-    transition: background 150ms ease, transform 150ms ease;
-    width: 100%;
-  }
-  .card-next-hint:hover { background: var(--n-100); }
-  .card-next-hint:active { transform: scale(0.98); }
-  .card-next-hint svg { stroke: var(--on-3); stroke-width: 2; fill: none; }
-
-  /* Detail facts table (key-value rows, used at bottom of cards) */
-  .detail-facts {
-    margin-top: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 12px 14px;
-    background: var(--n-100);
-    border-radius: 10px;
-  }
-  .detail-fact-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-  }
-  .detail-fact-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--on-3);
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-    flex-shrink: 0;
-  }
-  .detail-fact-value {
-    font-size: 12.5px;
-    font-weight: 500;
-    color: var(--on-1);
-    text-align: right;
-  }
-
-  .reassurance {
-    margin-top: 14px;
-    padding: 11px 13px;
-    background: var(--n-100);
-    border-radius: 10px;
-    font-size: 12.5px;
-    font-weight: 500;
-    color: var(--on-3);
-    line-height: 1.45;
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .reassurance svg { stroke: var(--on-3); stroke-width: 2; fill: none; flex-shrink: 0; margin-top: 2px; }
-
-  .recovery-block {
-    margin-top: 18px;
-    padding: 14px 16px;
-    background: #F4F6FA;
-    border-radius: 12px;
-    border: 1px solid #DEE5EE;
-    text-align: center;
-  }
-  .recovery-block-title {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--on-1);
-    line-height: 1.3;
-  }
-  .recovery-block-sub {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--on-3);
-    margin-top: 4px;
-    line-height: 1.45;
-  }
-
-  .steps-list {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .step-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 13px 14px;
-    background: #FBF6E5;
-    border: 1px solid #EBDDB0;
-    border-radius: 12px;
-  }
-  .step-num {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: var(--mom-accent);
-    color: white;
-    font-size: 12px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-  .step-text {
-    flex: 1;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--on-2);
-    line-height: 1.4;
-  }
-  .step-text strong { color: var(--on-1); font-weight: 700; }
-
+  /* Bottom dots + chevron nav */
   .stack-controls {
-    margin-top: 20px;
+    margin-top: 14px;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     z-index: 110;
   }
   .stack-chev {
-    width: 44px; height: 44px;
+    width: 38px; height: 38px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.16);
     border: 1px solid rgba(255,255,255,0.22);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
@@ -1112,79 +1354,10 @@
     background: rgba(255,255,255,0.35);
     transition: width .25s var(--ease-spring), background .25s;
   }
-  .stack-dot.active { width: 22px; background: white; border-radius: 999px; }
+  .stack-dot.active { width: 20px; background: white; border-radius: 999px; }
   .stack-dot.passed { background: rgba(255,255,255,0.7); }
 
-  .swipe-hint {
-    color: rgba(255,255,255,0.5);
-    font-size: 10.5px;
-    font-weight: 500;
-    margin-top: 4px;
-    letter-spacing: 0.4px;
-    text-align: center;
-  }
-
-  .enroll-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(6px);
-    z-index: 200;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn .25s var(--ease-std);
-  }
-  .enroll-overlay.active { display: flex; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  .enroll-card {
-    width: 280px;
-    background: white;
-    border-radius: 20px;
-    padding: 28px 22px 22px;
-    text-align: center;
-    position: relative;
-    animation: enrollPop .45s var(--ease-spring);
-  }
-  @keyframes enrollPop {
-    0% { transform: scale(0.7); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .check-circle {
-    width: 64px; height: 64px;
-    border-radius: 50%;
-    background: var(--success);
-    margin: 0 auto 16px;
-    display: flex; align-items: center; justify-content: center;
-    animation: checkPop .55s var(--ease-spring);
-  }
-  @keyframes checkPop {
-    0% { transform: scale(0); }
-    60% { transform: scale(1.18); }
-    100% { transform: scale(1); }
-  }
-  .check-circle svg { stroke: white; stroke-width: 3.5; fill: none; }
-  .enroll-title { font-size: 19px; font-weight: 700; color: var(--on-1); line-height: 1.3; }
-  .enroll-sub {
-    font-size: 13px; color: var(--on-3); line-height: 1.5; margin-top: 6px;
-  }
-  .enroll-confetti {
-    position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-    border-radius: 20px;
-  }
-  .confetti-piece {
-    position: absolute;
-    width: 8px; height: 14px;
-    border-radius: 2px;
-    top: 50%; left: 50%;
-    animation: confettiBurst 1.2s ease-out forwards;
-  }
-  @keyframes confettiBurst {
-    0% { transform: translate(-50%, -50%) rotate(0deg) scale(0.5); opacity: 1; }
-    100% { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1); opacity: 0; }
-  }
-
+  /* Toast */
   .toast {
     position: absolute;
     bottom: 96px;
@@ -1270,8 +1443,15 @@
           <div class="label">Yoga Days</div>
         </div>
       </div>
+
+      <div class="stories-row" id="storiesRow"></div>
+
       <div class="streak-card">
         <div class="streak-bars">
+          <div class="streak-bar-col">
+            <div class="streak-heart done"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
+            <div class="streak-bar-label">Sun</div>
+          </div>
           <div class="streak-bar-col">
             <div class="streak-heart done"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
             <div class="streak-bar-label">Mon</div>
@@ -1280,39 +1460,37 @@
             <div class="streak-heart done"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
             <div class="streak-bar-label">Tue</div>
           </div>
-          <div class="streak-bar-col">
-            <div class="streak-heart done"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
+          <div class="streak-bar-col is-today">
+            <div class="streak-heart today"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
             <div class="streak-bar-label">Wed</div>
           </div>
           <div class="streak-bar-col">
-            <div class="streak-heart done"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
+            <div class="streak-heart"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
             <div class="streak-bar-label">Thu</div>
-          </div>
-          <div class="streak-bar-col is-today">
-            <div class="streak-heart today"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
-            <div class="streak-bar-label">Fri</div>
           </div>
           <div class="streak-bar-col">
             <div class="streak-heart"><svg viewBox="0 0 24 22"><path d="M12 20.5C12 20.5 1.5 14 1.5 7.5C1.5 4 4.2 1.5 7.5 1.5C9.7 1.5 11.3 2.7 12 3.9C12.7 2.7 14.3 1.5 16.5 1.5C19.8 1.5 22.5 4 22.5 7.5C22.5 14 12 20.5 12 20.5Z" stroke-linejoin="round"/></svg></div>
-            <div class="streak-bar-label">Sat</div>
+            <div class="streak-bar-label">Fri</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Live Banner (before stories — variation) -->
-    <div class="live-banner" onclick="openStack('surya')">
-      <img class="live-banner-img" src="yoga-everyday.png" alt="LIVE Yoga Everyday Strength and Upper body Join Now" />
+    <div class="live-banner" onclick="showToast('Joining live')">
+      <div class="live-banner-inner">
+        <div class="live-banner-tag">LIVE NOW</div>
+        <div>
+          <div class="live-banner-title">Yoga Everyday: Upper Body</div>
+          <div class="live-banner-sub">Saurabh Bothra is on. 22 min left.</div>
+        </div>
+      </div>
     </div>
-
-    <!-- Stories Row (after live banner) -->
-    <div class="stories-row" id="storiesRow"></div>
 
     <div class="section-title">Upcoming today</div>
     <div class="upcoming-list" id="upcomingList"></div>
 
     <div class="section-title">Watch recorded session</div>
-    <div class="upcoming-list" id="missedList"></div>
+    <div class="recorded-rail" id="recordedRail"></div>
 
     <div style="height: 16px;"></div>
   </div>
@@ -1341,39 +1519,27 @@
   </div>
 
   <div class="cardstack-overlay" id="cardstackOverlay">
-    <div class="cardstack-header" id="cardstackHeader">
+    <div class="cardstack-header">
       <div class="cardstack-author-avatar" id="cardstackAvatar">HB</div>
-      <div>
+      <div class="cardstack-author-text">
         <div class="cardstack-author-name" id="cardstackAuthor">Habuild</div>
         <div class="cardstack-author-time" id="cardstackTime">Just now</div>
       </div>
+      <div class="cardstack-close" onclick="closeStack()">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round"/><line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round"/></svg>
+      </div>
     </div>
-    <button class="cardstack-close" onclick="closeStack()">
-      <svg width="18" height="18" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round"/><line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round"/></svg>
-    </button>
 
     <div class="stack-container" id="stackContainer"></div>
 
     <div class="stack-controls">
       <div class="stack-chev" id="stackPrev" onclick="advance(-1)">
-        <svg width="20" height="20" viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="stack-dots" id="stackDots"></div>
       <div class="stack-chev" id="stackNext" onclick="advance(1)">
-        <svg width="20" height="20" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-    </div>
-    <div class="swipe-hint">Swipe cards, tap edges, or use arrow keys</div>
-  </div>
-
-  <div class="enroll-overlay" id="enrollOverlay">
-    <div class="enroll-card">
-      <div class="enroll-confetti" id="enrollConfetti"></div>
-      <div class="check-circle">
-        <svg width="36" height="36" viewBox="0 0 40 40"><polyline points="8,21 17,30 32,12" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="enroll-title" id="enrollTitle">You are enrolled</div>
-      <div class="enroll-sub" id="enrollSub">We will send reminders before each session.</div>
     </div>
   </div>
 
@@ -1382,18 +1548,15 @@
 </div>
 
 <script>
-const LS_KEY = 'habuild_stories_v3_cardstack_v3';
+const LS_KEY = 'habuild_stories_v4_manish_v1';
 let state = {
   viewed: {},
-  enrolled: { surya: true },
-  props: {}
+  enrolled: { surya: true, marma: true },
+  selections: {}
 };
 try {
   const stored = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
-  if (stored) {
-    state = { viewed: {}, enrolled: { surya: true }, props: {}, ...stored };
-    if (typeof state.enrolled.surya === 'undefined') state.enrolled.surya = true;
-  }
+  if (stored) state = { viewed: {}, enrolled: { surya: true, marma: true }, selections: {}, ...stored };
 } catch(e) {}
 
 function saveState() {
@@ -1402,398 +1565,547 @@ function saveState() {
 
 function resetAll() {
   localStorage.removeItem(LS_KEY);
-  state = { viewed: {}, enrolled: { surya: true }, props: {} };
+  state = { viewed: {}, enrolled: { surya: true, marma: true }, selections: {} };
   renderStories();
   renderUpcoming();
-  renderMissed();
+  renderRecorded();
   closeStack();
   showToast('Prototype reset');
 }
 
-const SVG_KIDS_HERO = `
-<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-  <defs>
-    <linearGradient id="kidsSky" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FBEFD8"/>
-      <stop offset="100%" stop-color="#F4E0BB"/>
-    </linearGradient>
-    <radialGradient id="kidsSun" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#F2D88B"/>
-      <stop offset="100%" stop-color="#C9924A"/>
-    </radialGradient>
-  </defs>
-  <rect width="340" height="220" fill="url(#kidsSky)"/>
-  <circle cx="260" cy="78" r="40" fill="url(#kidsSun)" opacity="0.85"/>
-  <circle cx="260" cy="78" r="56" fill="none" stroke="#C9924A" stroke-width="1" opacity="0.25"/>
-  <circle cx="260" cy="78" r="72" fill="none" stroke="#C9924A" stroke-width="1" opacity="0.15"/>
-  <path d="M0 160 Q60 130 120 145 Q180 160 240 138 Q300 122 340 138 L340 175 L0 175 Z" fill="#D6B98A" opacity="0.7"/>
-  <path d="M0 175 Q70 158 150 170 Q240 184 340 162 L340 220 L0 220 Z" fill="#B89567"/>
-  <path d="M0 195 L340 195 L340 220 L0 220 Z" fill="#9C7E50"/>
-  <g opacity="0.85">
-    <line x1="55" y1="155" x2="55" y2="195" stroke="#6B4F2B" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="55" cy="148" r="14" fill="#8FA968"/>
-    <line x1="80" y1="160" x2="80" y2="195" stroke="#6B4F2B" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="80" cy="155" r="10" fill="#A0B679"/>
-    <line x1="295" y1="160" x2="295" y2="195" stroke="#6B4F2B" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="295" cy="152" r="13" fill="#8FA968"/>
-  </g>
-  <g transform="translate(140 175)">
-    <circle cx="0" cy="0" r="10" fill="#C9924A"/>
-    <rect x="-6" y="-2" width="12" height="22" rx="3" fill="#C9924A"/>
-    <circle cx="28" cy="-2" r="9" fill="#B57894"/>
-    <rect x="22" y="-4" width="12" height="22" rx="3" fill="#B57894"/>
-    <circle cx="56" cy="0" r="10" fill="#B68A3C"/>
-    <rect x="50" y="-2" width="12" height="22" rx="3" fill="#B68A3C"/>
-  </g>
-  <g fill="#8FA968" opacity="0.7">
-    <ellipse cx="40" cy="50" rx="4" ry="2" transform="rotate(30 40 50)"/>
-    <ellipse cx="120" cy="40" rx="3.5" ry="1.8" transform="rotate(-20 120 40)"/>
-    <ellipse cx="180" cy="60" rx="3" ry="1.5" transform="rotate(45 180 60)"/>
-  </g>
+/* ================= Story ring icons (line art, no emojis) ================= */
+
+const RING_MARMA = `<svg viewBox="0 0 32 32" fill="none" stroke="#4B5C73" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 8 c-3 0 -5 2 -5 5 c0 4 5 11 5 11 s5 -7 5 -11 c0 -3 -2 -5 -5 -5 z"/>
+  <circle cx="16" cy="13" r="1.5" fill="#4B5C73"/>
+  <line x1="10" y1="6" x2="22" y2="6"/>
 </svg>`;
 
-const SVG_SURYA_HERO = `
-<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-  <defs>
-    <linearGradient id="suryaBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FAEFCB"/>
-      <stop offset="100%" stop-color="#E9D49B"/>
-    </linearGradient>
-    <radialGradient id="suryaCore" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#F0DB95"/>
-      <stop offset="60%" stop-color="#D0AE5C"/>
-      <stop offset="100%" stop-color="#A37B30"/>
-    </radialGradient>
-  </defs>
-  <rect width="340" height="220" fill="url(#suryaBg)"/>
-  <g transform="translate(170 110)" stroke="#B68A3C" stroke-width="1.4" stroke-linecap="round" opacity="0.6">
-    <line x1="0" y1="-70" x2="0" y2="-92"/>
-    <line x1="33" y1="-62" x2="44" y2="-82"/>
-    <line x1="58" y1="-36" x2="78" y2="-48"/>
-    <line x1="68" y1="0" x2="92" y2="0"/>
-    <line x1="58" y1="36" x2="78" y2="48"/>
-    <line x1="33" y1="62" x2="44" y2="82"/>
-    <line x1="0" y1="70" x2="0" y2="92"/>
-    <line x1="-33" y1="62" x2="-44" y2="82"/>
-    <line x1="-58" y1="36" x2="-78" y2="48"/>
-    <line x1="-68" y1="0" x2="-92" y2="0"/>
-    <line x1="-58" y1="-36" x2="-78" y2="-48"/>
-    <line x1="-33" y1="-62" x2="-44" y2="-82"/>
-  </g>
-  <circle cx="170" cy="110" r="62" fill="none" stroke="#B68A3C" stroke-width="1" opacity="0.4"/>
-  <circle cx="170" cy="110" r="50" fill="url(#suryaCore)"/>
-  <circle cx="170" cy="110" r="36" fill="none" stroke="#F0DB95" stroke-width="1" opacity="0.7"/>
-  <circle cx="170" cy="110" r="22" fill="none" stroke="#F0DB95" stroke-width="1" opacity="0.5"/>
-  <line x1="40" y1="195" x2="300" y2="195" stroke="#B68A3C" stroke-width="1" opacity="0.4"/>
+const RING_SURYA = `<svg viewBox="0 0 32 32" fill="none" stroke="#8C7338" stroke-width="1.6" stroke-linecap="round">
+  <circle cx="16" cy="16" r="5"/>
+  <line x1="16" y1="3" x2="16" y2="6"/>
+  <line x1="16" y1="26" x2="16" y2="29"/>
+  <line x1="3" y1="16" x2="6" y2="16"/>
+  <line x1="26" y1="16" x2="29" y2="16"/>
+  <line x1="7" y1="7" x2="9" y2="9"/>
+  <line x1="23" y1="23" x2="25" y2="25"/>
+  <line x1="7" y1="25" x2="9" y2="23"/>
+  <line x1="23" y1="9" x2="25" y2="7"/>
 </svg>`;
 
-const SVG_WOMEN_HERO = `
-<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-  <defs>
-    <linearGradient id="womenBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#F6E0E5"/>
-      <stop offset="100%" stop-color="#E4C2CC"/>
-    </linearGradient>
-  </defs>
-  <rect width="340" height="220" fill="url(#womenBg)"/>
-  <g stroke="#B57894" stroke-width="1.2" fill="none" opacity="0.4" stroke-linecap="round">
-    <path d="M50 80 Q80 70 110 80"/>
-    <path d="M240 70 Q270 60 300 70"/>
-    <path d="M50 145 Q80 140 110 145"/>
-    <path d="M240 140 Q270 135 300 140"/>
-  </g>
-  <g transform="translate(170 110)" opacity="0.35">
-    <ellipse cx="0" cy="-44" rx="10" ry="24" fill="#B57894"/>
-    <ellipse cx="31" cy="-31" rx="10" ry="24" fill="#B57894" transform="rotate(45 31 -31)"/>
-    <ellipse cx="44" cy="0" rx="10" ry="24" fill="#B57894" transform="rotate(90 44 0)"/>
-    <ellipse cx="31" cy="31" rx="10" ry="24" fill="#B57894" transform="rotate(135 31 31)"/>
-    <ellipse cx="-31" cy="31" rx="10" ry="24" fill="#B57894" transform="rotate(-135 -31 31)"/>
-    <ellipse cx="-44" cy="0" rx="10" ry="24" fill="#B57894" transform="rotate(-90 -44 0)"/>
-    <ellipse cx="-31" cy="-31" rx="10" ry="24" fill="#B57894" transform="rotate(-45 -31 -31)"/>
-  </g>
-  <g transform="translate(170 130)" fill="#8B5C72">
-    <ellipse cx="0" cy="38" rx="58" ry="14"/>
-    <path d="M-22 -10 Q-26 18 -18 38 L18 38 Q26 18 22 -10 Q18 -22 0 -22 Q-18 -22 -22 -10 Z"/>
-    <rect x="-7" y="-26" width="14" height="10" rx="2"/>
-    <circle cx="0" cy="-38" r="14"/>
-    <circle cx="-12" cy="-40" r="6" opacity="0.85"/>
-    <path d="M-22 -5 Q-44 8 -38 32" stroke="#8B5C72" stroke-width="9" fill="none" stroke-linecap="round"/>
-    <path d="M22 -5 Q44 8 38 32" stroke="#8B5C72" stroke-width="9" fill="none" stroke-linecap="round"/>
-  </g>
-  <ellipse cx="170" cy="178" rx="80" ry="6" fill="#8B5C72" opacity="0.15"/>
-</svg>`;
-
-const SVG_MISSED_HERO = `
-<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-  <defs>
-    <linearGradient id="missBg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#E1E7EE"/>
-      <stop offset="100%" stop-color="#9CABBC"/>
-    </linearGradient>
-    <radialGradient id="missGlow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="rgba(255,255,255,0.45)"/>
-      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-    </radialGradient>
-  </defs>
-  <rect width="340" height="220" fill="url(#missBg)"/>
-  <ellipse cx="170" cy="110" rx="150" ry="80" fill="url(#missGlow)"/>
-  <g opacity="0.25">
-    <rect x="0" y="60" width="340" height="2" fill="#6B7C8E"/>
-    <rect x="0" y="160" width="340" height="2" fill="#6B7C8E"/>
-  </g>
-  <circle cx="170" cy="110" r="62" fill="none" stroke="#6B7C8E" stroke-width="1.5" opacity="0.5"/>
-  <circle cx="170" cy="110" r="48" fill="white" opacity="0.85"/>
-  <polygon points="158,88 158,132 192,110" fill="#6B7C8E"/>
-  <text x="22" y="36" font-family="Poppins, sans-serif" font-size="10" font-weight="700" fill="#6B7C8E" letter-spacing="1.4">RECORDING</text>
-  <line x1="22" y1="42" x2="86" y2="42" stroke="#6B7C8E" stroke-width="1" opacity="0.6"/>
-</svg>`;
-
-const SVG_MOM_HERO = `
-<svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-  <defs>
-    <linearGradient id="momBg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#FBF1D2"/>
-      <stop offset="100%" stop-color="#E8D29A"/>
-    </linearGradient>
-    <linearGradient id="cardPaper" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="100%" stop-color="#FBF1D2"/>
-    </linearGradient>
-  </defs>
-  <rect width="340" height="220" fill="url(#momBg)"/>
-  <g fill="#C9924A" opacity="0.2">
-    <path d="M50 50 c-4 -7 -14 -3 -14 4 c0 8 14 16 14 16 s14 -8 14 -16 c0 -7 -10 -11 -14 -4 z"/>
-    <path d="M285 60 c-3 -5 -10 -2 -10 3 c0 6 10 12 10 12 s10 -6 10 -12 c0 -5 -7 -8 -10 -3 z"/>
-    <path d="M55 175 c-3 -5 -10 -2 -10 3 c0 6 10 12 10 12 s10 -6 10 -12 c0 -5 -7 -8 -10 -3 z"/>
-    <path d="M295 175 c-3 -5 -10 -2 -10 3 c0 6 10 12 10 12 s10 -6 10 -12 c0 -5 -7 -8 -10 -3 z"/>
-  </g>
-  <g transform="translate(170 110) rotate(-5)">
-    <rect x="-92" y="-58" width="184" height="116" rx="4" fill="#C9924A" opacity="0.18"/>
-  </g>
-  <g transform="translate(170 110)">
-    <rect x="-90" y="-58" width="180" height="116" rx="4" fill="url(#cardPaper)" stroke="#C9924A" stroke-width="1.2"/>
-    <line x1="-90" y1="0" x2="90" y2="0" stroke="#C9924A" stroke-width="0.8" opacity="0.3" stroke-dasharray="2 2"/>
-    <g stroke="#A88641" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.7">
-      <path d="M-70 -36 Q-50 -40 -20 -36 Q10 -32 50 -36"/>
-      <path d="M-70 -22 Q-30 -26 0 -22 Q40 -18 70 -22"/>
-      <path d="M-70 -8 Q-40 -12 -10 -8 Q20 -4 60 -8"/>
-    </g>
-    <path d="M0 16 c-5 -8 -16 -3 -16 5 c0 10 16 19 16 19 s16 -9 16 -19 c0 -8 -11 -13 -16 -5 z" fill="#B57894"/>
-    <path d="M30 44 Q40 40 50 44 Q60 48 70 44" stroke="#A88641" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.7"/>
-  </g>
-</svg>`;
-
-const RING_KIDS = `
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="16" cy="11" r="5" fill="none" stroke="#8A6A35" stroke-width="1.6"/>
-  <g stroke="#8A6A35" stroke-width="1.4" stroke-linecap="round">
-    <line x1="16" y1="3" x2="16" y2="5"/>
-    <line x1="23.5" y1="6" x2="22" y2="7.5"/>
-    <line x1="27" y1="11" x2="25" y2="11"/>
-    <line x1="8.5" y1="6" x2="10" y2="7.5"/>
-    <line x1="5" y1="11" x2="7" y2="11"/>
-  </g>
+const RING_KIDS = `<svg viewBox="0 0 32 32" fill="none" stroke="#8A6A35" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="16" cy="10" r="4"/>
   <circle cx="9" cy="24" r="2.5" fill="#8A6A35"/>
   <circle cx="16" cy="25" r="2.8" fill="#8A6A35"/>
   <circle cx="23" cy="24" r="2.5" fill="#8A6A35"/>
 </svg>`;
 
-const RING_SURYA = `
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="16" cy="16" r="5.5" fill="none" stroke="#7A5C25" stroke-width="1.8"/>
-  <g stroke="#7A5C25" stroke-width="1.6" stroke-linecap="round">
-    <line x1="16" y1="3" x2="16" y2="7"/>
-    <line x1="16" y1="25" x2="16" y2="29"/>
-    <line x1="3" y1="16" x2="7" y2="16"/>
-    <line x1="25" y1="16" x2="29" y2="16"/>
-    <line x1="6.5" y1="6.5" x2="9.3" y2="9.3"/>
-    <line x1="22.7" y1="22.7" x2="25.5" y2="25.5"/>
-    <line x1="6.5" y1="25.5" x2="9.3" y2="22.7"/>
-    <line x1="22.7" y1="9.3" x2="25.5" y2="6.5"/>
+const RING_WOMEN = `<svg viewBox="0 0 32 32" fill="none" stroke="#7A4F62" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 24 Q9 22 6 14 Q12 14 16 22 Q20 14 26 14 Q23 22 16 24 Z"/>
+  <path d="M16 24 Q11 18 12 10 Q14 14 16 14 Q18 14 20 10 Q21 18 16 24 Z"/>
+</svg>`;
+
+const RING_STRESS = `<svg viewBox="0 0 32 32" fill="none" stroke="#4F6A4D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="16" cy="14" r="6"/>
+  <path d="M10 26 c0 -2 3 -3 6 -3 s6 1 6 3"/>
+  <path d="M16 10 c-2 1 -2 4 0 5 c2 -1 2 -4 0 -5 z" fill="#4F6A4D"/>
+</svg>`;
+
+const RING_GUT = `<svg viewBox="0 0 32 32" fill="none" stroke="#8C7338" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 5 c2 0 4 2 4 4 c0 3 -3 3 -4 5 c-1 -2 -4 -2 -4 -5 c0 -2 2 -4 4 -4 z"/>
+  <path d="M14 14 c0 4 4 4 4 8 s-3 5 -3 5"/>
+  <path d="M18 14 c0 3 -3 4 -3 7"/>
+</svg>`;
+
+const RING_IYD = `<svg viewBox="0 0 32 32" fill="none" stroke="#4F5A6E" stroke-width="1.6" stroke-linecap="round">
+  <circle cx="16" cy="16" r="10"/>
+  <path d="M6 16 Q16 11 26 16"/>
+  <path d="M6 16 Q16 21 26 16"/>
+  <line x1="16" y1="6" x2="16" y2="26"/>
+</svg>`;
+
+const RING_MOMS = `<svg viewBox="0 0 32 32" fill="none" stroke="#8A5560" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 25 c-6 -2 -10 -7 -10 -12 c0 -3 2 -5 4 -5 c2 0 4 1 6 4 c2 -3 4 -4 6 -4 c2 0 4 2 4 5 c0 5 -4 10 -10 12 z"/>
+</svg>`;
+
+const RING_RECOVERY = `<svg viewBox="0 0 32 32" fill="none" stroke="#6A7785" stroke-width="1.6" stroke-linecap="round">
+  <circle cx="16" cy="16" r="11"/>
+  <polygon points="13,11 13,21 22,16" fill="#6A7785" stroke="none"/>
+</svg>`;
+
+const RING_2271 = `<svg viewBox="0 0 32 32" fill="none" stroke="#8B7236" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M16 22 c-5 -1 -9 -4 -9 -10 c0 -4 3 -6 4 -4 c1 -3 3 -5 5 -5 c2 0 4 2 5 5 c1 -2 4 0 4 4 c0 6 -4 9 -9 10 z"/>
+  <line x1="16" y1="22" x2="16" y2="26"/>
+  <line x1="12" y1="26" x2="20" y2="26"/>
+</svg>`;
+
+const RING_REFLECT = `<svg viewBox="0 0 32 32" fill="none" stroke="#76699A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="16" cy="14" r="6"/>
+  <path d="M16 14 c1 -1 3 -2 5 -2"/>
+  <path d="M8 26 Q16 22 24 26"/>
+</svg>`;
+
+/* Hero SVGs (per story) */
+const HERO_KIDS = `<svg viewBox="0 0 327 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hk_sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FBEFD8"/>
+      <stop offset="100%" stop-color="#F0D8AB"/>
+    </linearGradient>
+    <radialGradient id="hk_sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#F4D88A"/>
+      <stop offset="100%" stop-color="#C99453"/>
+    </radialGradient>
+  </defs>
+  <rect width="327" height="168" fill="url(#hk_sky)"/>
+  <circle cx="250" cy="50" r="34" fill="url(#hk_sun)" opacity="0.88"/>
+  <path d="M0 130 Q80 120 165 130 Q250 142 327 122 L327 168 L0 168 Z" fill="#B89567"/>
+  <g transform="translate(130 128)">
+    <circle cx="0" cy="0" r="9" fill="#C9924A"/><rect x="-5" y="-2" width="10" height="22" rx="3" fill="#C9924A"/>
+    <circle cx="28" cy="-2" r="8" fill="#B57894"/><rect x="23" y="-4" width="10" height="22" rx="3" fill="#B57894"/>
+    <circle cx="56" cy="0" r="9" fill="#B68A3C"/><rect x="51" y="-2" width="10" height="22" rx="3" fill="#B68A3C"/>
   </g>
 </svg>`;
 
-const RING_WOMEN = `
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <g fill="none" stroke="#7A4F62" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M16 24 Q8 22 5 14 Q12 14 16 22 Q20 14 27 14 Q24 22 16 24 Z"/>
-    <path d="M16 24 Q11 18 12 10 Q14 14 16 14 Q18 14 20 10 Q21 18 16 24 Z"/>
-    <path d="M16 24 Q16 18 16 12"/>
+const HERO_WOMEN = `<svg viewBox="0 0 327 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hw_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6E0E5"/>
+      <stop offset="100%" stop-color="#DDB7C2"/>
+    </linearGradient>
+  </defs>
+  <rect width="327" height="168" fill="url(#hw_bg)"/>
+  <g transform="translate(163 90)" stroke="#7A4F62" stroke-width="1.5" fill="none" opacity="0.7">
+    <circle cx="0" cy="-22" r="14"/>
+    <path d="M-14 -8 Q-22 30 -10 60 L10 60 Q22 30 14 -8"/>
   </g>
-  <ellipse cx="16" cy="25.5" rx="9" ry="1" fill="#7A4F62" opacity="0.3"/>
+  <path d="M16 130 Q60 122 100 130 M227 130 Q270 122 310 130" stroke="#A88FAB" stroke-width="1.4" fill="none" opacity="0.5"/>
 </svg>`;
 
-const RING_MISSED = `
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="16" cy="16" r="11" fill="none" stroke="#455260" stroke-width="1.8"/>
-  <polygon points="13,11 13,21 22,16" fill="#455260"/>
-</svg>`;
-
-const RING_MOM = `
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <g fill="none" stroke="#6F5827" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
-    <rect x="6" y="9" width="20" height="15" rx="1.5"/>
-    <path d="M16 18 c-2 -3 -5 -1 -5 1 c0 3 5 6 5 6 s5 -3 5 -6 c0 -2 -3 -4 -5 -1 z" fill="#6F5827"/>
+const HERO_STRESS = `<svg viewBox="0 0 327 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hs_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#DEE7DC"/>
+      <stop offset="100%" stop-color="#A8BFA4"/>
+    </linearGradient>
+  </defs>
+  <rect width="327" height="168" fill="url(#hs_bg)"/>
+  <g transform="translate(163 90)" stroke="#4F6A4D" stroke-width="1.6" fill="none" opacity="0.75" stroke-linecap="round">
+    <circle cx="0" cy="-12" r="18"/>
+    <path d="M-30 35 Q0 18 30 35"/>
+    <line x1="-8" y1="-15" x2="-2" y2="-9"/>
+    <line x1="8" y1="-15" x2="2" y2="-9"/>
+    <path d="M-6 -2 Q0 4 6 -2"/>
+  </g>
+  <g stroke="#4F6A4D" stroke-width="0.9" fill="none" opacity="0.35" stroke-linecap="round">
+    <path d="M30 30 Q50 24 70 30"/>
+    <path d="M260 30 Q280 24 300 30"/>
+    <path d="M30 140 Q60 134 90 140"/>
+    <path d="M240 140 Q270 134 300 140"/>
   </g>
 </svg>`;
 
+const HERO_IYD = `<svg viewBox="0 0 327 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hi_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#DDE2EA"/>
+      <stop offset="100%" stop-color="#A5B0C2"/>
+    </linearGradient>
+  </defs>
+  <rect width="327" height="168" fill="url(#hi_bg)"/>
+  <g transform="translate(163 88)" stroke="#4F5A6E" stroke-width="1.4" fill="none" opacity="0.7">
+    <circle cx="0" cy="0" r="42"/>
+    <ellipse cx="0" cy="0" rx="42" ry="14"/>
+    <line x1="-42" y1="0" x2="42" y2="0"/>
+    <line x1="0" y1="-42" x2="0" y2="42"/>
+    <path d="M-30 -30 Q0 -36 30 -30"/>
+    <path d="M-30 30 Q0 36 30 30"/>
+  </g>
+  <g fill="#4F5A6E" opacity="0.45">
+    <circle cx="50" cy="40" r="2"/>
+    <circle cx="270" cy="50" r="2"/>
+    <circle cx="60" cy="130" r="1.8"/>
+    <circle cx="260" cy="130" r="1.8"/>
+  </g>
+</svg>`;
+
+const HERO_GUT = `<svg viewBox="0 0 327 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hg_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F2E4C2"/>
+      <stop offset="100%" stop-color="#D4B374"/>
+    </linearGradient>
+  </defs>
+  <rect width="327" height="168" fill="url(#hg_bg)"/>
+  <g transform="translate(120 90)" stroke="#8C7338" stroke-width="1.5" fill="white" fill-opacity="0.55">
+    <circle cx="0" cy="0" r="26"/>
+    <circle cx="46" cy="6" r="22"/>
+    <circle cx="86" cy="-8" r="18"/>
+    <g fill="#8C7338" fill-opacity="0.7" stroke="none">
+      <circle cx="-4" cy="-2" r="2.5"/>
+      <circle cx="6" cy="6" r="2"/>
+      <circle cx="44" cy="8" r="2.4"/>
+      <circle cx="50" cy="0" r="2"/>
+      <circle cx="86" cy="-10" r="2.2"/>
+    </g>
+  </g>
+</svg>`;
+
+const HERO_MOMS = `<svg viewBox="0 0 327 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hmo_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F4DCE0"/>
+      <stop offset="100%" stop-color="#D9AFB6"/>
+    </linearGradient>
+  </defs>
+  <rect width="327" height="168" fill="url(#hmo_bg)"/>
+  <g transform="translate(163 90)" stroke="#8A5560" stroke-width="1.6" fill="white" fill-opacity="0.85">
+    <rect x="-45" y="-32" width="90" height="64" rx="4"/>
+    <path d="M-30 0 c0 -10 12 -12 12 0 c0 -12 12 -10 12 0 c0 6 -12 14 -12 14 s-12 -8 -12 -14 z" fill="#C8848F" stroke="#8A5560"/>
+    <line x1="-30" y1="18" x2="-10" y2="18" stroke-width="1"/>
+    <line x1="-30" y1="22" x2="-15" y2="22" stroke-width="1"/>
+  </g>
+</svg>`;
+
+const HERO_RECOVERY = `<svg viewBox="0 0 327 168" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="hr_bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E7EAEE"/>
+      <stop offset="100%" stop-color="#B7BFC9"/>
+    </linearGradient>
+  </defs>
+  <rect width="327" height="168" fill="url(#hr_bg)"/>
+  <g transform="translate(163 84)" stroke="#5A6A7E" stroke-width="1.4" fill="none" opacity="0.6">
+    <path d="M-50 0 Q-25 -30 0 0 Q25 30 50 0"/>
+    <path d="M-50 18 Q-25 -12 0 18 Q25 48 50 18"/>
+  </g>
+</svg>`;
+
+/* Upcoming icons */
 const UPC_KIDS = `<svg viewBox="0 0 32 32"><circle cx="16" cy="11" r="5" fill="none" stroke="#8A6A35" stroke-width="2"/><circle cx="10" cy="24" r="2.5" fill="#8A6A35"/><circle cx="16" cy="25" r="2.8" fill="#8A6A35"/><circle cx="22" cy="24" r="2.5" fill="#8A6A35"/></svg>`;
-const UPC_SURYA = `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="5.5" fill="none" stroke="#7A5C25" stroke-width="2"/><g stroke="#7A5C25" stroke-width="1.8" stroke-linecap="round"><line x1="16" y1="4" x2="16" y2="7"/><line x1="16" y1="25" x2="16" y2="28"/><line x1="4" y1="16" x2="7" y2="16"/><line x1="25" y1="16" x2="28" y2="16"/></g></svg>`;
-const UPC_WOMEN = `<svg viewBox="0 0 32 32"><g fill="none" stroke="#7A4F62" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M16 24 Q9 22 6 14 Q12 14 16 22 Q20 14 26 14 Q23 22 16 24 Z"/></g></svg>`;
+const UPC_SURYA = `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="5.5" fill="none" stroke="#8C7338" stroke-width="2"/><g stroke="#8C7338" stroke-width="1.8" stroke-linecap="round"><line x1="16" y1="4" x2="16" y2="7"/><line x1="16" y1="25" x2="16" y2="28"/><line x1="4" y1="16" x2="7" y2="16"/><line x1="25" y1="16" x2="28" y2="16"/></g></svg>`;
+const UPC_MARMA = `<svg viewBox="0 0 32 32"><path d="M16 7 c-3 0 -5 2 -5 5 c0 5 5 14 5 14 s5 -9 5 -14 c0 -3 -2 -5 -5 -5 z" fill="none" stroke="#4B5C73" stroke-width="2"/><circle cx="16" cy="13" r="2" fill="#4B5C73"/></svg>`;
 const UPC_DAILY = `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="10" fill="none" stroke="#0369A1" stroke-width="2"/><path d="M16 11 v5 l3 2" stroke="#0369A1" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
 const UPC_BOX = `<svg viewBox="0 0 32 32"><rect x="8" y="8" width="16" height="16" rx="2" fill="none" stroke="#0369A1" stroke-width="2"/><path d="M12 16 h8" stroke="#0369A1" stroke-width="2" stroke-linecap="round"/></svg>`;
-const UPC_PLAY = `<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="11" fill="none" stroke="#475569" stroke-width="2"/><path d="M14 12 L21 16 L14 20 Z" fill="#475569"/></svg>`;
 
-const SG_PRANAM = `<svg viewBox="0 0 24 24"><path d="M12 14 v6 M9 14 h6 M10 8 a2 2 0 0 1 4 0 v6 h-4 z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
-const SG_ARCH = `<svg viewBox="0 0 24 24"><path d="M5 20 Q12 4 19 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`;
-const SG_FOLD = `<svg viewBox="0 0 24 24"><path d="M12 4 v8 M8 16 L12 12 L16 16 M6 20 h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-const SG_LUNGE = `<svg viewBox="0 0 24 24"><path d="M4 20 L12 12 L20 18 M12 4 v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-const SG_PLANK = `<svg viewBox="0 0 24 24"><line x1="4" y1="14" x2="20" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4" y1="20" x2="4" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="20" y1="20" x2="20" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
-const SG_COBRA = `<svg viewBox="0 0 24 24"><path d="M4 20 Q4 12 12 12 Q20 12 20 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
-const SG_DOG = `<svg viewBox="0 0 24 24"><path d="M4 20 L12 6 L20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+/* ============================================================
+   PALETTES — 4-palette theme system (Manish's Figma).
+   Each story has a palette key. The .stack-card gets inline CSS vars
+   so every nested component (Hero, Day-list, Timeline, Day-tab, Day-arc,
+   Nutrition, Recording, Confirm) inherits the palette automatically.
+   ============================================================ */
+const PALETTES = {
+  blue: {
+    name: 'Blue',
+    cta: '#0A6598',
+    dark: '#0369A1',
+    mid: '#0281CA',
+    light: '#1C7BB0',
+    gradientTop: '#E0F2FE',
+    statBg: '#EFF6FF',
+    todayPill: '#0A6598',
+    pillText: '#FFFFFF',
+    ctaText: '#FFFFFF',
+  },
+  purple: {
+    name: 'Purple',
+    cta: '#A23AAD',
+    dark: '#692770',
+    mid: '#87458E',
+    light: '#B977C0',
+    gradientTop: '#F3E8FF',
+    statBg: '#FAF5FF',
+    todayPill: '#A23AAD',
+    pillText: '#FFFFFF',
+    ctaText: '#FFFFFF',
+  },
+  green: {
+    name: 'Green',
+    cta: '#5EA123',
+    dark: '#3E5F20',
+    mid: '#608043',
+    light: '#86A85F',
+    gradientTop: '#ECFDF5',
+    statBg: '#F0FDF4',
+    todayPill: '#5EA123',
+    pillText: '#FFFFFF',
+    ctaText: '#FFFFFF',
+  },
+  coral: {
+    name: 'Coral',
+    cta: '#FF5269',
+    dark: '#952837',
+    mid: '#997C7F',
+    light: '#FBA5AF',
+    gradientTop: '#FFE4E6',
+    statBg: '#FFF1F2',
+    todayPill: '#FF5269',
+    pillText: '#FFFFFF',
+    ctaText: '#FFFFFF',
+  },
+};
+
+function paletteStyleString(key) {
+  const p = PALETTES[key] || PALETTES.blue;
+  return [
+    '--p-cta:' + p.cta,
+    '--p-dark:' + p.dark,
+    '--p-mid:' + p.mid,
+    '--p-light:' + p.light,
+    '--p-gradient-top:' + p.gradientTop,
+    '--p-stat-bg:' + p.statBg,
+    '--p-today-pill:' + p.todayPill,
+    '--p-pill-text:' + p.pillText,
+    '--p-cta-text:' + p.ctaText,
+    '--ring-color:' + p.cta,
+  ].join(';');
+}
+
+/* ============================================================
+   STORIES — 11 stories matching CMS seeded data
+   ============================================================ */
 
 const STORIES = {
 
+  /* 1. Today: Day 3 of Marma — Daily Update template (3 cards) */
+  marma: {
+    label: 'Day 3 Marma',
+    palette: 'blue',
+    ringClass: 'r-marma',
+    thumbClass: 't-marma',
+    thumbSvg: RING_MARMA,
+    authorAvatar: 'KH',
+    authorAvatarBg: 'linear-gradient(135deg, #97A8BD, #4B5C73)',
+    authorName: 'Marma Workshop',
+    authorTime: 'Day 3 of 10',
+    enrollKey: 'marma',
+    enrollLabel: 'Marma Day 3',
+    enrollTime: '5:25 AM',
+    enrollSub: 'Live with Kanchan Hatwar',
+    enrollIcon: 'marma',
+    cards: [
+      // Card 1 — Today's session (Component A)
+      {
+        component: 'hero-announce',
+        heroSvg: HERO_RECOVERY,
+        pill: 'DAY 3 OF 10',
+        title: 'Hand Marma & Disease Connections',
+        sub: "Today's live: the hand has 14 marma points that map to your organs. We'll touch 4 of them.",
+        expert: { initials: 'KH', name: 'By Kanchan Hatwar' },
+        meta: [
+          { val: '5:25 AM', lbl: 'Time' },
+          { val: '40 min', lbl: 'Duration' },
+          { val: 'Day 3 of 10', lbl: 'Program' }
+        ],
+        bullets: {
+          title: "Today's points",
+          items: [
+            'Thumb root — digestive support',
+            'Index base — respiratory',
+            'Palm centre — heart and circulation',
+            'Wrist crease — nervous system'
+          ]
+        },
+        secondaryLink: 'See full 10-day map',
+        cta: 'Join Live Session',
+        toastOnCta: 'Joining live session'
+      },
+      // Card 2 — Flow timeline (Component C)
+      {
+        component: 'timeline',
+        pill: "TODAY'S FLOW",
+        title: 'A 40-minute hand reset',
+        sub: 'Five steps. Sit comfortably with hands in your lap.',
+        expert: { initials: 'KH', name: 'By Kanchan Hatwar' },
+        timeline: [
+          { num: 1, title: 'Centring breath', sub: '5:25 AM · 4 min · Settle in' },
+          { num: 2, title: 'Hand warm-up', sub: '5:29 AM · 6 min · Open the joints' },
+          { num: 3, title: 'Four marma points', sub: '5:35 AM · 20 min · The main work', today: true },
+          { num: 4, title: 'Integration mudra', sub: '5:55 AM · 6 min · Hold and feel' },
+          { num: 5, title: 'Closing pranam', sub: '6:01 AM · 4 min · Close the practice' }
+        ],
+        cta: 'Join Live Session',
+        toastOnCta: 'Joining live session'
+      },
+      // Card 3 — Join + 10-day arc (Component E)
+      {
+        component: 'day-arc',
+        pill: 'YOUR PROGRESS',
+        title: 'Join the live session',
+        sub: 'Recording stays for 24 hours if you miss.',
+        arc: {
+          label: 'YOUR 10-DAY ARC',
+          totalDays: 10,
+          completedDays: 2,
+          today: 3
+        },
+        cta: 'Join Live Session',
+        toastOnCta: 'Joining live session'
+      }
+    ]
+  },
+
+  /* 2. Surya Day 1 Live — Daily Update template (3 cards) */
+  surya: {
+    label: 'Surya Day 1',
+    palette: 'purple',
+    ringClass: 'r-surya',
+    thumbClass: 't-surya',
+    thumbSvg: RING_SURYA,
+    authorAvatar: 'KM',
+    authorAvatarBg: 'linear-gradient(135deg, #D5B779, #8C7338)',
+    authorName: 'Surya Namaskar',
+    authorTime: 'Day 1 of 5',
+    enrollKey: 'surya',
+    enrollLabel: 'Surya Namaskar Day 1',
+    enrollTime: '6:00 AM',
+    enrollSub: 'Live with Kashish Makhijani',
+    enrollIcon: 'surya',
+    cards: [
+      {
+        component: 'hero-announce',
+        heroSvg: HERO_RECOVERY,
+        pill: 'DAY 1 OF 5',
+        title: 'Heart Opening Flow',
+        sub: 'Day 1 of 5. Build to 20 rounds by the end of the week. Today we start with 8.',
+        expert: { initials: 'KM', name: 'By Kashish Makhijani' },
+        meta: [
+          { val: '6:00 AM', lbl: 'Time' },
+          { val: '30 min', lbl: 'Duration' },
+          { val: '20 rounds', lbl: 'Target' }
+        ],
+        bullets: {
+          title: 'What you get',
+          items: [
+            'Warm-up at your pace',
+            '8 rounds together with breath count',
+            'Hold each pose for one breath',
+            'Closing rest in shavasana'
+          ]
+        },
+        cta: 'Join Live Session',
+        toastOnCta: 'Joining live session'
+      },
+      {
+        component: 'timeline',
+        pill: "TODAY'S FLOW",
+        title: '12 poses, one round',
+        sub: "One full Surya Namaskar. We'll do 8 rounds today.",
+        expert: { initials: 'KM', name: 'By Kashish Makhijani' },
+        timeline: [
+          { num: 1, title: 'Pranamasana', sub: 'Stand with palms at heart' },
+          { num: 2, title: 'Hastauttanasana', sub: 'Reach up, gentle backbend' },
+          { num: 3, title: 'Padahastasana', sub: 'Forward fold to floor', today: true },
+          { num: 4, title: 'Ashwa Sanchalanasana', sub: 'Right leg back, look up' },
+          { num: 5, title: 'Dandasana', sub: 'Plank, strong line' }
+        ],
+        cta: 'Join Live Session',
+        toastOnCta: 'Joining live session'
+      },
+      {
+        component: 'day-arc',
+        pill: 'YOUR PROGRESS',
+        title: 'Join the live session',
+        sub: 'Recording stays for 24 hours if you miss.',
+        arc: {
+          label: 'YOUR 5-DAY ARC',
+          totalDays: 5,
+          completedDays: 0,
+          today: 1
+        },
+        cta: 'Join Live Session',
+        toastOnCta: 'Joining live session'
+      }
+    ]
+  },
+
+  /* 3. Kids Summer Camp — Enroll Camp (3 cards) */
   kids: {
     label: 'Kids Camp',
-    pattern: 'enroll',
-    accent: 'kids',
-    authorAvatar: 'KC',
-    authorName: 'Habuild Kids Camp',
-    authorTime: 'Starts Mon 1 Jun',
-    thumbClass: 'kids-thumb',
+    palette: 'blue',
+    ringClass: 'r-kids',
+    thumbClass: 't-kids',
     thumbSvg: RING_KIDS,
-    avatarGrad: 'linear-gradient(135deg, #C9924A, #8A6A35)',
-    isNew: true,
+    authorAvatar: 'TB',
+    authorAvatarBg: 'linear-gradient(135deg, #C8A879, #8A6A35)',
+    authorName: 'Habuild Kids Camp',
+    authorTime: 'Starts on 14 Jun',
     enrollKey: 'kids',
     enrollLabel: 'Kids Camp Day 1',
-    enrollTime: '8:30 AM',
-    enrollSub: 'Mon 1 Jun with Bhakti',
+    enrollTime: '6:00 AM',
+    enrollSub: 'Mon 14 Jun with Trishala Bothra',
     enrollIcon: 'kids',
     cards: [
+      // Card 1 — Hero announcement (Component A)
       {
-        hero: SVG_KIDS_HERO,
-        kenburns: true,
-        pillClass: 'kids',
-        pillText: '10-DAY · KIDS CAMP',
-        title: 'A 10-day camp for your kids',
-        sub: 'Mornings of yoga and activities, led by 5 experts.',
-        whenLine: 'Starts Mon 1 Jun · 3 days from now',
-        nextHint: 'See the full 10-day plan',
-        cta: 'Save my spot',
-        ctaClass: 'kids',
-        enrollOnCta: true,
-        confetti: true
-      },
-      {
-        pillClass: 'kids',
-        pillText: "WHAT'S INSIDE",
-        title: 'Two sessions, every day',
-        sub: '8:30 AM kids yoga, followed by an 11 AM themed activity with an expert.',
-        dayList: [
-          { day: '1', topic: 'Storytime', expert: 'Bhakti' },
-          { day: '2', topic: 'Kitchen Chemistry', expert: 'Kanchan' },
-          { day: '3', topic: 'Physics Pit Stop', expert: 'Akta' },
-          { day: '4', topic: 'Food Detective', expert: 'Dr Umesh' },
-          { day: '5', topic: 'Wall Art', expert: 'Bhakti' },
-          { day: '6', topic: 'Animal Asanas', expert: 'Bhakti' },
-          { day: '7', topic: 'Rainbow Flow', expert: 'Akta' },
-          { day: '8', topic: 'Magic of Marma', expert: 'Kanchan' },
-          { day: '9', topic: 'Sleeping Kingdom', expert: 'Apoorva' },
-          { day: '10', topic: 'Grand Finale Fun Day', expert: 'Bhakti' }
+        component: 'hero-announce',
+        heroSvg: HERO_KIDS,
+        hasHeroImage: true,
+        pill: '14 DAY PROGRAM',
+        title: 'A 14-day camp for Kids',
+        sub: 'Mornings of yoga and activities, led by 5 experts. Ages 6-14.',
+        expert: { initials: 'TB', name: 'By Trishala Bothra' },
+        meta: [
+          { val: '6 AM | 11 AM', lbl: 'Time' },
+          { val: '45 min', lbl: 'Duration' },
+          { val: '14 days', lbl: 'Program' }
         ],
-        experts: [
-          { initials: 'BH', cls: 'e1' },
-          { initials: 'KN', cls: 'e2' },
-          { initials: 'AK', cls: 'e3' },
-          { initials: 'UM', cls: 'e4' },
-          { initials: 'AP', cls: 'e5' }
-        ],
-        expertsLabel: '5 EXPERTS ACROSS THE 10 DAYS'
+        bullets: {
+          title: 'Activities',
+          items: [
+            'Daily activities for the kids',
+            'Interesting games for screen breaks',
+            'Long term healthy habit building'
+          ]
+        },
+        secondaryLink: 'See the full plan',
+        cta: 'Enroll Now',
+        toastOnCta: 'Spot saved'
       },
+      // Card 2 — Day-list (Component B)
       {
-        pillClass: 'kids',
-        pillText: 'READY TO JOIN',
+        component: 'day-list',
+        pill: '14 DAY PROGRAM',
+        title: 'Two Sessions Everyday',
+        sub: '8:30 AM Kids Yoga + 11 AM themed activity with an expert.',
+        expert: { initials: 'AA', name: 'By Aditi Arvind' },
+        days: [
+          { n: 1, title: 'Kitchen Chemistry', author: 'Aadya Aggarwal' },
+          { n: 2, title: 'Heartful Journaling', author: 'Aadya Aggarwal' },
+          { n: 3, title: 'Kitchen Chemistry', author: 'Aadya Aggarwal' },
+          { n: 4, title: 'Physics Pit Stop', author: 'Aadya Aggarwal' },
+          { n: 5, title: 'Food Detective', author: 'Aadya Aggarwal' },
+          { n: 6, title: 'Wall Art', author: 'Aadya Aggarwal' }
+        ],
+        cta: 'Enroll Now',
+        toastOnCta: 'Spot saved'
+      },
+      // Card 3 — Ready to join (simple confirmation)
+      {
+        component: 'confirm',
+        pill: 'READY TO JOIN',
         title: 'Save your spot',
         sub: 'Free for Habuild members. You can leave anytime.',
-        reassurance: "We'll send a reminder before each morning session.",
+        confirmLine: "We'll send a reminder before each morning session.",
+        confirmSub: 'Also added to your in-app calendar.',
         cta: 'Save my spot',
-        ctaClass: 'kids',
-        enrollOnCta: true,
-        confetti: true,
-        closeOnEnroll: true
+        secondaryCta: 'Add to phone calendar',
+        toastOnCta: 'Spot saved for Kids Camp'
       }
     ]
   },
 
-  surya: {
-    label: 'Surya Namaskar',
-    pattern: 'daily-update',
-    accent: 'surya',
-    authorAvatar: 'SB',
-    authorName: 'Surya Namaskar Workshop',
-    authorTime: "Today's update",
-    thumbClass: 'surya-thumb',
-    thumbSvg: RING_SURYA,
-    avatarGrad: 'linear-gradient(135deg, #B68A3C, #7A5C25)',
-    cards: [
-      {
-        hero: SVG_SURYA_HERO,
-        kenburns: true,
-        pillClass: 'surya',
-        pillText: 'DAY 3 OF 5 · SURYA NAMASKAR',
-        title: 'Heart Opening Flow',
-        sub: "Today's target: 60 rounds.",
-        whenLine: '5:30 AM · 30 min · Live with Saurabh Bothra'
-      },
-      {
-        pillClass: 'surya',
-        pillText: "TODAY'S FLOW",
-        title: "What you'll flow through",
-        sub: 'Day 3 dwells on heart-opening variations of the classic 12 steps.',
-        timeline: [
-          { step: 'Gentle warm-up', meta: '5 min · neck, shoulders, wrists' },
-          { step: 'Surya Namaskar A · slow rounds', meta: '8 min · 12 rounds, breath-led' },
-          { step: 'Heart-opening variation', meta: '10 min · deeper Bhujangasana, Ustrasana', focus: true },
-          { step: 'Faster rounds for warmth', meta: '5 min · pick up the pace, 24 rounds' },
-          { step: 'Cool-down and savasana', meta: '2 min · long deep rest' }
-        ],
-        glyphs: [
-          { svg: SG_PRANAM }, { svg: SG_ARCH }, { svg: SG_FOLD }, { svg: SG_LUNGE }, { svg: SG_PLANK }, { svg: SG_COBRA },
-          { svg: SG_DOG }, { svg: SG_LUNGE }, { svg: SG_FOLD }, { svg: SG_ARCH }, { svg: SG_PRANAM, focus: true }, { svg: SG_COBRA, focus: true }
-        ],
-        glyphsLabel: '12-STEP REFERENCE · TODAY EMPHASIZES STEPS 11 & 12'
-      },
-      {
-        pillClass: 'surya',
-        pillText: '5:30 AM TODAY',
-        title: 'Join the live session',
-        sub: 'Saurabh Bothra leads the flow live. Recording stays for 24 hours if you miss.',
-        progress: [
-          { label: 'D1', state: 'done' },
-          { label: 'D2', state: 'done' },
-          { label: 'D3', state: 'today' },
-          { label: 'D4', state: 'upcoming' },
-          { label: 'D5', state: 'upcoming' }
-        ],
-        cta: 'Join 5:30 AM session',
-        ctaClass: 'surya',
-        secondaryCta: "Watch yesterday's recording"
-      }
-    ]
-  },
-
+  /* 4. Women's Health — Enroll Camp (3 cards) */
   women: {
     label: "Women's Health",
-    pattern: 'enroll',
-    accent: 'women',
-    authorAvatar: 'TB',
-    authorName: "Women's Health Workshop",
-    authorTime: 'Starts Sun 1 Jun',
-    thumbClass: 'women-thumb',
+    palette: 'coral',
+    ringClass: 'r-women',
+    thumbClass: 't-women',
     thumbSvg: RING_WOMEN,
-    avatarGrad: 'linear-gradient(135deg, #B57894, #7A4F62)',
-    isNew: true,
+    authorAvatar: 'TB',
+    authorAvatarBg: 'linear-gradient(135deg, #C9A2B0, #7A4F62)',
+    authorName: "Women's Health Workshop",
+    authorTime: 'Starts on 1 Jun',
     enrollKey: 'women',
     enrollLabel: "Women's Health Day 1",
     enrollTime: '6:00 AM',
@@ -1801,122 +2113,420 @@ const STORIES = {
     enrollIcon: 'women',
     cards: [
       {
-        hero: SVG_WOMEN_HERO,
-        kenburns: true,
-        pillClass: 'women',
-        pillText: '5-DAY · WORKSHOP',
+        component: 'hero-announce',
+        heroSvg: HERO_WOMEN,
+        hasHeroImage: true,
+        pill: '5 DAY WORKSHOP',
         title: "Women's Health Workshop",
-        sub: 'Live with Trishala Bothra · 6:00 AM daily.',
-        whenLine: 'Starts Sun 1 Jun · in 2 days',
-        nextHint: 'See the full 5-day plan',
-        cta: 'Enroll · Free for members',
-        ctaClass: 'women',
-        enrollOnCta: true,
-        confetti: true
+        sub: 'A gentle 5-day workshop on cycle, pelvic care, and energy through your stages.',
+        expert: { initials: 'TB', name: 'By Trishala Bothra' },
+        meta: [
+          { val: '6:00 AM', lbl: 'Time' },
+          { val: '35 min', lbl: 'Duration' },
+          { val: '5 days', lbl: 'Program' }
+        ],
+        bullets: {
+          title: 'What we cover',
+          items: [
+            'Cycle awareness and gentle flows',
+            'Pelvic floor strengthening',
+            'Hormone-supportive poses',
+            'Rest practices for each phase'
+          ]
+        },
+        secondaryLink: 'See the full plan',
+        cta: 'Enroll Now',
+        toastOnCta: 'Spot saved'
       },
       {
-        pillClass: 'women',
-        pillText: 'THE 5-DAY ARC',
-        title: 'A week shaped around you',
-        sub: 'Each session is 30 min. For women 30+, pre and post-menopausal, beginners welcome.',
-        dayList: [
-          { day: 'DAY 1', topic: 'Pelvic Floor Foundation' },
-          { day: 'DAY 2', topic: 'Hormonal Balance through Breath' },
-          { day: 'DAY 3', topic: 'Posture and Spinal Health' },
-          { day: 'DAY 4', topic: 'Marma Points for Women' },
-          { day: 'DAY 5', topic: 'Integration and Q&A' }
+        component: 'day-list',
+        pill: '5 DAY WORKSHOP',
+        title: 'Five Mornings, One Body',
+        sub: 'One topic each day, building gently across the week.',
+        expert: { initials: 'TB', name: 'By Trishala Bothra' },
+        days: [
+          { n: 1, title: 'Cycle awareness', author: 'Trishala Bothra' },
+          { n: 2, title: 'Pelvic floor basics', author: 'Trishala Bothra' },
+          { n: 3, title: 'Hormone-friendly flow', author: 'Trishala Bothra' },
+          { n: 4, title: 'Rest as practice', author: 'Trishala Bothra' },
+          { n: 5, title: 'Integration & journaling', author: 'Trishala Bothra' }
         ],
-        cta: 'Enroll · Free for members',
-        ctaClass: 'women',
-        enrollOnCta: true,
-        confetti: true
+        cta: 'Enroll Now',
+        toastOnCta: 'Spot saved'
+      },
+      {
+        component: 'confirm',
+        pill: 'READY TO JOIN',
+        title: 'Save your spot',
+        sub: 'Free for Habuild members. You can leave anytime.',
+        confirmLine: "We'll send a reminder before each 6 AM session.",
+        confirmSub: 'Also added to your in-app calendar.',
+        cta: 'Save my spot',
+        secondaryCta: 'Add to phone calendar',
+        toastOnCta: "Spot saved for Women's Health"
       }
     ]
   },
 
-  missed: {
-    label: 'Recording',
-    pattern: 'recovery',
-    accent: 'missed',
+  /* 5. Stress Management Workshop — Multi-Expert (3 cards) */
+  stress: {
+    label: 'Stress Management',
+    palette: 'purple',
+    ringClass: 'r-stress',
+    thumbClass: 't-stress',
+    thumbSvg: RING_STRESS,
+    authorAvatar: 'AA',
+    authorAvatarBg: 'linear-gradient(135deg, #A8BFA4, #4F6A4D)',
+    authorName: 'Stress Management Workshop',
+    authorTime: '10 days · 8 experts',
+    cards: [
+      {
+        component: 'hero-announce',
+        heroSvg: HERO_STRESS,
+        hasHeroImage: true,
+        pill: '10 DAYS · 8 EXPERTS',
+        title: 'Stress Management Workshop',
+        sub: '10 days. 8 specialists. One holistic look at where stress lives in you, and how to release it.',
+        meta: [
+          { val: '7:00 PM', lbl: 'Time' },
+          { val: '45 min', lbl: 'Duration' },
+          { val: '10 days', lbl: 'Program' }
+        ],
+        bullets: {
+          title: 'What you get',
+          items: [
+            'Daily live session with a different expert',
+            'Workbook delivered to your email',
+            'Recordings of every session for 30 days',
+            'Closing integration circle on Day 10'
+          ]
+        },
+        cta: 'Enroll Now',
+        toastOnCta: 'Spot saved'
+      },
+      {
+        component: 'day-list',
+        pill: 'EXPERT LINEUP',
+        title: '8 specialists, 10 days',
+        sub: 'A different expert each day, plus integration on Days 9 and 10.',
+        days: [
+          { n: 1, title: 'Stress and the body', author: 'Aaditya Aggarwal' },
+          { n: 2, title: 'Breath as medicine', author: 'Riya Arora' },
+          { n: 3, title: 'Yoga for the nervous system', author: 'Kashish Makhijani' },
+          { n: 4, title: 'Sleep and recovery', author: 'Kartikk Sarangi' },
+          { n: 5, title: 'Pelvic and core release', author: 'Trishala Bothra', today: true },
+          { n: 6, title: 'Mindset shifts', author: 'Rina Sahgal' },
+          { n: 7, title: 'Nutrition for calm', author: 'Yamini Aggarwal' },
+          { n: 8, title: 'Sound healing', author: 'Aaditya Aggarwal' }
+        ],
+        cta: 'Enroll Now',
+        toastOnCta: 'Spot saved'
+      },
+      {
+        component: 'day-tabs',
+        dayTabs: [
+          { label: 'Day 1', state: 'done' },
+          { label: 'Day 2', state: 'done' },
+          { label: 'Day 3', state: 'done' },
+          { label: 'Day 4', state: 'done' },
+          { label: 'Day 5', state: 'current' },
+          { label: 'Day 6', state: 'locked' },
+          { label: 'Day 7', state: 'locked' }
+        ],
+        pill: 'DAY 5 OF 10',
+        timeRow: '7:00 PM · 45 min',
+        title: "Today's Schedule",
+        sub: 'Pelvic and core release with Trishala Bothra.',
+        timeline: [
+          { num: 1, title: 'Centring + intention', sub: '7:00 PM · 5 min' },
+          { num: 2, title: 'Hip openers', sub: '7:05 PM · 10 min' },
+          { num: 3, title: 'Pelvic floor work', sub: '7:15 PM · 15 min', today: true },
+          { num: 4, title: 'Restorative twist', sub: '7:30 PM · 10 min' },
+          { num: 5, title: 'Closing journaling', sub: '7:40 PM · 5 min' }
+        ],
+        cta: 'Join Live Session',
+        toastOnCta: 'Joining live session'
+      }
+    ]
+  },
+
+  /* 6. Gut Cleanse — Nutrition Program (2 cards) */
+  gut: {
+    label: 'Gut Cleanse',
+    palette: 'green',
+    ringClass: 'r-gut',
+    thumbClass: 't-gut',
+    thumbSvg: RING_GUT,
+    authorAvatar: 'YA',
+    authorAvatarBg: 'linear-gradient(135deg, #D4B374, #8C7338)',
+    authorName: 'Gut Cleanse with Yamini',
+    authorTime: 'Day 3 of 7',
+    cards: [
+      {
+        component: 'hero-announce',
+        heroSvg: HERO_GUT,
+        hasHeroImage: true,
+        pill: '7 DAY PROGRAM',
+        title: 'Gut Cleanse with Yamini',
+        sub: 'A 7-day reset that gives your digestion a real pause. Light, simple, doable.',
+        expert: { initials: 'YA', name: 'By Yamini Aggarwal' },
+        meta: [
+          { val: 'Daily', lbl: 'Email' },
+          { val: '7 days', lbl: 'Duration' },
+          { val: 'In-app', lbl: 'Guide' }
+        ],
+        bullets: {
+          title: 'What you get',
+          items: [
+            'Daily email with the day-plan',
+            'Video guide for the morning ritual',
+            "Today's approved food list, in app",
+            'Three simple recipes per day'
+          ]
+        },
+        cta: 'Start the program',
+        toastOnCta: 'Starting Gut Cleanse'
+      },
+      {
+        component: 'nutrition',
+        pill: 'DAY 3 OF 7',
+        title: "Today's guidance",
+        sub: 'Day 3 is the adjustment day. Your body is resetting. These are your anchors.',
+        sections: [
+          {
+            title: 'Morning ritual',
+            type: 'text',
+            text: 'Warm water with a squeeze of lemon, sipped slowly. Wait 30 minutes before tea.'
+          },
+          {
+            title: 'Approved foods today',
+            type: 'list',
+            list: [
+              { name: 'Moong dal khichdi', desc: 'For lunch, with ghee and rock salt' },
+              { name: 'Steamed vegetables only', desc: 'For dinner, lightly seasoned' },
+              { name: 'Coconut water', desc: 'As needed, fresh if possible' },
+              { name: 'Ginger-ajwain tea', desc: 'Twice a day, between meals' }
+            ]
+          },
+          {
+            title: 'Avoid today',
+            type: 'list',
+            avoid: true,
+            list: [
+              { name: 'Dairy', desc: 'No milk, curd, paneer' },
+              { name: 'Gluten', desc: 'No wheat, no maida' },
+              { name: 'Sugar', desc: 'Including sweet fruits today' }
+            ]
+          }
+        ],
+        cta: "See today's full guide",
+        toastOnCta: 'Opening full guide'
+      }
+    ]
+  },
+
+  /* 7. International Yoga Day 2026 — Mass Event (2 cards) */
+  iyd: {
+    label: 'Yoga Day 2026',
+    palette: 'blue',
+    ringClass: 'r-iyd',
+    thumbClass: 't-iyd',
+    thumbSvg: RING_IYD,
+    authorAvatar: 'SB',
+    authorAvatarBg: 'linear-gradient(135deg, #A5B0C2, #4F5A6E)',
+    authorName: 'International Yoga Day',
+    authorTime: 'Sun 21 Jun',
+    cards: [
+      {
+        component: 'hero-announce',
+        heroSvg: HERO_IYD,
+        hasHeroImage: true,
+        pill: 'FREE · WORLD RECORD ATTEMPT',
+        title: 'International Yoga Day 2026',
+        sub: 'Join the world on 21 June. Last year, 7,50,074 of us showed up across 21 countries.',
+        meta: [
+          { val: '21 Jun', lbl: 'Date' },
+          { val: '60 min', lbl: 'Duration' },
+          { val: '21 countries', lbl: 'Joining' }
+        ],
+        bullets: {
+          title: 'Why come',
+          items: [
+            'Live with Saurabh Bothra and the full team',
+            'A simple flow anyone can do',
+            'Free for everyone, no signup needed',
+            'Be part of a Guinness attempt'
+          ]
+        },
+        cta: 'Register Free',
+        toastOnCta: 'Registered'
+      },
+      {
+        component: 'timeline',
+        pill: '3 STEPS TO JOIN',
+        title: 'Three steps to be part of history',
+        sub: 'Save the date now. The link goes live one hour before.',
+        timeline: [
+          { num: 1, title: 'Register below', sub: 'Free · takes 10 seconds', today: true },
+          { num: 2, title: 'Open YouTube live', sub: '6:30 AM IST on 21 June' },
+          { num: 3, title: 'Stay for the full 60 min', sub: 'Count is recorded for Guinness' }
+        ],
+        cta: 'Register Free',
+        secondaryCta: 'Remind me on the day',
+        toastOnCta: 'Registered'
+      }
+    ]
+  },
+
+  /* 8. Mom's Day Card Maker — Mass Event simplified (1 hero + 1 steps) */
+  moms: {
+    label: "Mom's Day card",
+    palette: 'coral',
+    ringClass: 'r-moms',
+    thumbClass: 't-moms',
+    thumbSvg: RING_MOMS,
     authorAvatar: 'HB',
+    authorAvatarBg: 'linear-gradient(135deg, #D9AFB6, #8A5560)',
+    authorName: 'Habuild',
+    authorTime: "Mother's Day tool",
+    cards: [
+      {
+        component: 'hero-announce',
+        heroSvg: HERO_MOMS,
+        hasHeroImage: true,
+        pill: "MOTHER'S DAY · TOOL",
+        title: 'Make a card for Maa',
+        sub: 'A small digital card for the woman who taught you everything. Send it on WhatsApp.',
+        meta: [
+          { val: 'Free', lbl: 'Cost' },
+          { val: '2 min', lbl: 'To make' },
+          { val: 'WhatsApp', lbl: 'Send via' }
+        ],
+        cta: 'Start designing',
+        toastOnCta: 'Opening card maker'
+      },
+      {
+        component: 'timeline',
+        pill: 'HOW IT WORKS',
+        title: 'Three steps to send a card',
+        sub: 'Pick a template, add your words, send. No design skills needed.',
+        timeline: [
+          { num: 1, title: 'Choose a card', sub: '6 hand-drawn templates' },
+          { num: 2, title: 'Add a small message', sub: 'In your language', today: true },
+          { num: 3, title: 'Send via WhatsApp', sub: "Or save and print at home" }
+        ],
+        cta: 'Start designing',
+        toastOnCta: 'Opening card maker'
+      }
+    ]
+  },
+
+  /* 9. Full Body Stretch — Recovery (1 card) */
+  recovery: {
+    label: 'Missed yesterday',
+    palette: 'coral',
+    ringClass: 'r-recovery',
+    thumbClass: 't-recovery',
+    thumbSvg: RING_RECOVERY,
+    authorAvatar: 'HB',
+    authorAvatarBg: 'linear-gradient(135deg, #B7BFC9, #6A7785)',
     authorName: 'Habuild',
     authorTime: 'Yesterday · 5:30 AM',
-    thumbClass: 'missed-thumb',
-    thumbSvg: RING_MISSED,
-    avatarGrad: 'linear-gradient(135deg, #6B7C8E, #455260)',
-    isMissed: true,
     cards: [
       {
-        hero: SVG_MISSED_HERO,
-        pillClass: 'missed',
-        pillText: 'YESTERDAY · 28 MIN',
+        component: 'video',
+        videoDuration: '39 min',
+        pill: 'RECORDING · 39 MIN',
         title: 'Full Body Stretch',
-        sub: "You missed yesterday's morning session. The recording counts toward your No-Zero Day.",
-        whenLine: 'Available until tonight 11:59 PM',
-        recoveryBlock: {
-          title: '28 minutes · Saurabh Bothra',
-          sub: 'Gentle full-body stretch, all levels welcome.'
-        },
-        cta: 'Watch recording',
-        ctaClass: 'missed'
+        sub: "You missed yesterday's morning session. Recording stays available for 24 hours, then it's gone.",
+        cta: 'Watch Recording',
+        toastOnCta: 'Opening recording'
       }
     ]
   },
 
-  mom: {
-    label: "Mom's Day",
-    pattern: 'seasonal',
-    accent: 'mom',
+  /* 10. 2271 Days Together — Mass Event simplified (1 milestone hero + 1 share) */
+  '2271': {
+    label: '2271 days',
+    palette: 'green',
+    ringClass: 'r-2271',
+    thumbClass: 't-2271',
+    thumbSvg: RING_2271,
     authorAvatar: 'HB',
-    authorName: 'Habuild',
-    authorTime: "Mother's Day Sun 31 May",
-    thumbClass: 'mom-thumb',
-    thumbSvg: RING_MOM,
-    avatarGrad: 'linear-gradient(135deg, #A88641, #6F5827)',
-    isSeasonal: true,
+    authorAvatarBg: 'linear-gradient(135deg, #C7A66B, #8B7236)',
+    authorName: 'Habuild Community',
+    authorTime: 'A milestone moment',
     cards: [
       {
-        hero: SVG_MOM_HERO,
-        kenburns: true,
-        pillClass: 'mom',
-        pillText: "MOTHER'S DAY · TOOL",
-        title: 'Card for Maa',
-        sub: 'Make a small digital card for the woman who taught you everything.',
-        whenLine: "Mother's Day is in 2 days · Sunday",
-        cta: 'Start designing',
-        ctaClass: 'mom'
-      },
+        component: 'milestone',
+        pill: 'MILESTONE',
+        title: '2271 days of showing up together',
+        sub: 'Real change is never about intensity. It is about consistency, choosing yourself, one day at a time.',
+        cta: 'Make your poster',
+        secondaryCta: 'See community wall',
+        toastOnCta: 'Opening poster maker'
+      }
+    ]
+  },
+
+  /* 11. June reflection — Mass Event Card 2 pattern with 3 prompts */
+  reflect: {
+    label: 'June reflection',
+    palette: 'purple',
+    ringClass: 'r-reflect',
+    thumbClass: 't-reflect',
+    thumbSvg: RING_REFLECT,
+    authorAvatar: 'HB',
+    authorAvatarBg: 'linear-gradient(135deg, #B7A8D0, #76699A)',
+    authorName: 'Habuild · Saurabh Bothra',
+    authorTime: 'A pause for June',
+    cards: [
       {
-        pillClass: 'mom',
-        pillText: 'HOW IT WORKS',
-        title: 'Three quick steps',
-        sub: 'Takes less time than your morning chai. You can edit anytime before Sunday.',
-        steps: [
-          { num: 1, text: '<strong>Pick a design</strong> (4 styles)' },
-          { num: 2, text: '<strong>Write your note</strong> (English or Hindi)' },
-          { num: 3, text: '<strong>Save</strong> to share on Sunday' }
+        component: 'reflect',
+        pill: 'MONTH-END · JUNE',
+        title: 'Pause and look back',
+        sub: 'As we wrap up June, take a gentle moment to sit with three small questions. No right answers.',
+        prompts: [
+          'What felt like a win for you in June?',
+          'How did yoga support your body or mind this month?',
+          'What intention would you like to carry into July?'
         ],
-        cta: 'Start designing',
-        ctaClass: 'mom',
-        secondaryCta: 'Already created? See your card'
+        cta: 'Open journal',
+        secondaryCta: 'Share in community',
+        toastOnCta: 'Opening journal'
       }
     ]
   }
+
 };
 
-const STORY_ORDER = ['kids', 'surya', 'women', 'missed', 'mom'];
+const STORY_ORDER = [
+  'marma',     // Today's session — top priority
+  'surya',
+  'kids',
+  'women',
+  'stress',
+  'gut',
+  'iyd',
+  'moms',
+  'recovery',
+  '2271',
+  'reflect'
+];
+
+/* ============================================================
+   RENDER — Story rail
+   ============================================================ */
 
 function renderStories() {
   const row = document.getElementById('storiesRow');
-  // Sort: unviewed first (preserving STORY_ORDER), then viewed at the end
-  const unviewed = STORY_ORDER.filter(key => !state.viewed[key]);
-  const viewed   = STORY_ORDER.filter(key =>  state.viewed[key]);
+  const unviewed = STORY_ORDER.filter(k => !state.viewed[k]);
+  const viewed   = STORY_ORDER.filter(k =>  state.viewed[k]);
   const ordered  = [...unviewed, ...viewed];
   row.innerHTML = ordered.map(key => {
     const s = STORIES[key];
     const isViewed = state.viewed[key];
-    const ringClass = isViewed ? 'viewed' : `${key}-ring`;
-    // Segmented ring: one arc per card. Single-card stories get a solid ring.
+    const ringClass = isViewed ? 'viewed' : s.ringClass;
     const r = 28;
     const circumference = 2 * Math.PI * r;
     const n = Math.max(1, s.cards.length);
@@ -1926,9 +2536,13 @@ function renderStories() {
       const segLen = (circumference - gap * n) / n;
       dashAttr = `stroke-dasharray="${segLen.toFixed(2)} ${gap}"`;
     }
+    // Inject ring stroke color from palette (viewed state overrides to gray via CSS)
+    const paletteKey = s.palette || 'blue';
+    const ringColor = (PALETTES[paletteKey] || PALETTES.blue).cta;
+    const ringStyle = `--ring-color:${ringColor};`;
     return `
       <div class="story-item" onclick="openStack('${key}')">
-        <div class="story-ring ${ringClass}">
+        <div class="story-ring ${ringClass}" style="${ringStyle}">
           <svg class="ring-svg" viewBox="0 0 60 60">
             <circle cx="30" cy="30" r="${r}" ${dashAttr} />
           </svg>
@@ -1971,12 +2585,13 @@ function renderUpcoming() {
         let imgClass = 'daily';
         if (s.enrollIcon === 'kids') { svg = UPC_KIDS; imgClass = 'kids'; }
         else if (s.enrollIcon === 'surya') { svg = UPC_SURYA; imgClass = 'surya'; }
-        else if (s.enrollIcon === 'women') { svg = UPC_WOMEN; imgClass = 'women'; }
+        else if (s.enrollIcon === 'marma') { svg = UPC_MARMA; imgClass = 'marma'; }
+        else if (s.enrollIcon === 'women') { svg = UPC_DAILY; imgClass = 'women'; }
         enrolledItems.push({
           imgClass: imgClass,
           svg: svg,
           time: s.enrollTime || 'Today',
-          duration: '30 min',
+          duration: '40 min',
           title: s.enrollLabel,
           sub: s.enrollSub || ''
         });
@@ -2001,48 +2616,46 @@ function renderUpcoming() {
   `).join('');
 }
 
-function renderMissed() {
-  const list = document.getElementById('missedList');
-  if (!list) return;
+function renderRecorded() {
+  const rail = document.getElementById('recordedRail');
   const items = [
     {
-      imgClass: 'missed',
-      svg: UPC_PLAY,
-      time: 'Yesterday',
-      duration: '28 min',
-      title: 'Full Body Stretch',
-      sub: 'With Saurabh Bothra',
-      expires: '12h left',
-      onclick: "openStack('missed')"
+      cls: 't1',
+      expiry: '6h left',
+      title: 'Heart Opening Flow',
+      sub: '30 min · Day 1 Surya',
+      key: 'surya'
     },
     {
-      imgClass: 'missed',
-      svg: UPC_PLAY,
-      time: '2 days ago',
-      duration: '25 min',
-      title: 'Hip Mobility Flow',
-      sub: 'With Priya',
-      expires: '4h left',
-      onclick: 'showToast(\'Recording opening\')'
+      cls: 't2',
+      expiry: '18h left',
+      title: 'Hand Marma points',
+      sub: '40 min · Day 2 Marma',
+      key: 'marma'
+    },
+    {
+      cls: 't3',
+      expiry: '3 days',
+      title: 'Cycle awareness',
+      sub: "35 min · Women's Health",
+      key: 'women'
     }
   ];
-  list.innerHTML = items.map(it => `
-    <div class="upcoming-item" onclick="${it.onclick}">
-      <div class="upcoming-info">
-        <div class="upcoming-time">
-          <span>${it.time}</span>
-          ${it.duration ? `<span class="dot"></span><span>${it.duration}</span>` : ''}
-        </div>
-        <div class="upcoming-title">${it.title}</div>
-        ${it.sub ? `<div class="upcoming-sub">${it.sub}</div>` : ''}
+  rail.innerHTML = items.map(it => `
+    <div class="recorded-card" onclick="showToast('Opening recording')">
+      <div class="recorded-thumb ${it.cls}">
+        <div class="recorded-expiry">${it.expiry}</div>
+        <svg class="play-svg" viewBox="0 0 24 24" fill="#0C4A6E"><polygon points="8,6 18,12 8,18"/></svg>
       </div>
-      <div class="upcoming-image ${it.imgClass}">
-        ${it.expires ? `<div class="upc-expires-chip">${it.expires}</div>` : ''}
-        ${it.svg}
-      </div>
+      <div class="recorded-title">${it.title}</div>
+      <div class="recorded-sub">${it.sub}</div>
     </div>
   `).join('');
 }
+
+/* ============================================================
+   CARD STACK
+   ============================================================ */
 
 let currentStoryKey = null;
 let currentCardIdx = 0;
@@ -2054,10 +2667,7 @@ function openStack(key) {
   if (!s) return;
   currentStoryKey = key;
 
-  currentCards = s.cards.filter(c => {
-    if (c.showOnlyIfEnrolled && !state.enrolled[s.enrollKey]) return false;
-    return true;
-  });
+  currentCards = s.cards.slice();
   currentCardIdx = 0;
   totalCards = currentCards.length;
 
@@ -2066,7 +2676,7 @@ function openStack(key) {
 
   const avatarEl = document.getElementById('cardstackAvatar');
   avatarEl.textContent = s.authorAvatar;
-  avatarEl.style.background = s.avatarGrad;
+  avatarEl.style.background = s.authorAvatarBg;
   document.getElementById('cardstackAuthor').textContent = s.authorName;
   document.getElementById('cardstackTime').textContent = s.authorTime;
 
@@ -2090,180 +2700,280 @@ function renderStackCards() {
 }
 
 function renderCardHTML(card, idx) {
-  const heroHTML = card.hero ? `<div class="card-hero-svg ${card.kenburns ? 'ken-burns' : ''}">${card.hero}</div>` : '';
-  const pillHTML = card.pillText ? `<div class="card-pill ${card.pillClass || ''}">${card.pillText}</div>` : '';
-  const titleHTML = card.title ? `<div class="card-title">${card.title}</div>` : '';
-  const subHTML = card.sub ? `<div class="card-sub">${card.sub}</div>` : '';
-  const whenLineHTML = card.whenLine ? `<div class="card-when-line">${card.whenLine}</div>` : '';
-  const nextHintHTML = card.nextHint ? `
-    <div class="card-next-hint" onclick="advance(1)">
-      <span>${card.nextHint}</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,6 15,12 9,18"/></svg>
-    </div>
-  ` : '';
+  const hasHero = !!card.hasHeroImage;
+  const isMilestone = card.component === 'milestone';
+  const isVideo = card.component === 'video';
 
-  let bodyHTML = '';
+  let cardClasses = ['stack-card'];
+  if (hasHero || isVideo) cardClasses.push('has-hero-image');
+  if (isMilestone) cardClasses.push('has-completion-hero');
 
-  if (card.dayList) {
-    const iconClass = card.pillClass;
-    // Detect compact format (10-day arc with day + topic + expert)
-    const isCompact = card.dayList[0] && card.dayList[0].expert !== undefined;
-    bodyHTML += `<div class="day-list ${isCompact ? 'compact' : ''}">`;
-    card.dayList.forEach(d => {
-      if (isCompact) {
-        bodyHTML += `
-          <div class="day-list-row-compact">
-            <div class="dlc-day ${iconClass}">${d.day}</div>
-            <div class="dlc-topic">${d.topic}</div>
-            <div class="dlc-expert">${d.expert}</div>
-          </div>
-        `;
-      } else {
-        bodyHTML += `
-          <div class="day-list-row">
-            <div class="day-list-icon ${iconClass}">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--${iconClass}-accent);"><circle cx="12" cy="12" r="3"/><path d="M12 4v3 M12 17v3 M4 12h3 M17 12h3 M6 6l2 2 M16 16l2 2 M6 18l2-2 M16 8l2-2"/></svg>
-            </div>
-            <div class="day-list-text">
-              <div class="day-list-day">${d.day}</div>
-              <div class="day-list-topic">${d.topic}</div>
-            </div>
-          </div>
-        `;
-      }
-    });
-    if (card.dayListMore) {
-      bodyHTML += `<div class="day-list-more">${card.dayListMore}</div>`;
-    }
-    bodyHTML += `</div>`;
+  // Build the hero area
+  let heroHTML = '';
+  if (hasHero && card.heroSvg) {
+    heroHTML = `<div class="card-hero-img">${card.heroSvg}</div>`;
   }
-
-  if (card.experts) {
-    bodyHTML += `<div class="experts-row">
-      <div class="experts-row-label">${card.expertsLabel || 'Experts'}</div>
-      <div class="experts-avatars">
-        ${card.experts.map(e => `<div class="expert-avatar ${e.cls}">${e.initials}</div>`).join('')}
+  if (isVideo) {
+    heroHTML = `
+      <div class="video-thumb">
+        <svg class="bg-decoration" viewBox="0 0 327 168" preserveAspectRatio="xMidYMid slice">
+          <path d="M0 100 Q80 80 165 100 Q250 120 327 95" stroke="#5A6A7E" stroke-width="1.4" fill="none" opacity="0.55"/>
+          <path d="M0 130 Q80 110 165 130 Q250 150 327 125" stroke="#5A6A7E" stroke-width="1.4" fill="none" opacity="0.4"/>
+        </svg>
+        <div class="video-duration-badge">${card.videoDuration || ''}</div>
+        <div class="video-play-btn">
+          <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+        </div>
       </div>
-      ${card.expertsNames ? `<div class="experts-names">${card.expertsNames}</div>` : ''}
-    </div>`;
+    `;
   }
-
-  if (card.timeline) {
-    bodyHTML += `<div class="surya-timeline">`;
-    card.timeline.forEach((row, ri) => {
-      bodyHTML += `
-        <div class="surya-tl-row">
-          <div class="surya-tl-dot ${row.focus ? 'focus' : ''}">${ri + 1}</div>
-          <div class="surya-tl-content">
-            <div class="surya-tl-step">${row.step}${row.focus ? '<span class="focus-tag">Today</span>' : ''}</div>
-            <div class="surya-tl-meta">${row.meta}</div>
+  if (isMilestone) {
+    heroHTML = `
+      <div class="milestone-hero">
+        <div class="milestone-count">2271</div>
+        <div class="milestone-label">Days together</div>
+        <div class="milestone-stats">
+          <div class="milestone-stat-col">
+            <div class="milestone-stat-val">15.3M</div>
+            <div class="milestone-stat-lbl">Members</div>
+          </div>
+          <div class="milestone-stat-col">
+            <div class="milestone-stat-val">169</div>
+            <div class="milestone-stat-lbl">Countries</div>
+          </div>
+          <div class="milestone-stat-col">
+            <div class="milestone-stat-val">356</div>
+            <div class="milestone-stat-lbl">Your days</div>
           </div>
         </div>
-      `;
-    });
-    bodyHTML += `</div>`;
-  }
-
-  if (card.glyphs) {
-    bodyHTML += `<div class="surya-glyphs">
-      <div class="surya-glyphs-label">${card.glyphsLabel || '12-STEP REFERENCE'}</div>
-      <div class="surya-glyphs-row">
-        ${card.glyphs.map(g => `<div class="surya-glyph ${g.focus ? 'focus' : ''}">${g.svg}</div>`).join('')}
-      </div>
-    </div>`;
-  }
-
-  if (card.progress) {
-    bodyHTML += `<div class="surya-progress">
-      <div class="surya-progress-label">Your 5-day arc</div>
-      <div class="surya-progress-track">
-        ${card.progress.map(p => {
-          let inner = p.label;
-          if (p.state === 'done') inner = '<svg width="11" height="11" viewBox="0 0 14 14"><polyline points="2,7 6,11 12,3" stroke-linejoin="round" stroke-linecap="round"/></svg>';
-          return `
-            <div class="surya-pnode ${p.state === 'today' ? 'today-node' : ''}">
-              <div class="surya-pnode-circle ${p.state}">${inner}</div>
-              <div class="surya-pnode-label">${p.label}</div>
-            </div>
-          `;
-        }).join('')}
-      </div>
-    </div>`;
-  }
-
-  if (card.whoList) {
-    bodyHTML += `<div class="who-list">
-      ${card.whoList.map(item => `
-        <div class="who-row">
-          <div class="who-row-dot"></div>
-          <div class="who-row-text">${item}</div>
-        </div>
-      `).join('')}
-    </div>`;
-  }
-
-  if (card.steps) {
-    bodyHTML += `<div class="steps-list">
-      ${card.steps.map(st => `
-        <div class="step-row">
-          <div class="step-num">${st.num}</div>
-          <div class="step-text">${st.text}</div>
-        </div>
-      `).join('')}
-    </div>`;
-  }
-
-  if (card.recoveryBlock) {
-    bodyHTML += `<div class="recovery-block">
-      <div class="recovery-block-title">${card.recoveryBlock.title}</div>
-      <div class="recovery-block-sub">${card.recoveryBlock.sub}</div>
-    </div>`;
-  }
-
-  if (card.detailFacts) {
-    bodyHTML += `<div class="detail-facts">
-      ${card.detailFacts.map(f => `
-        <div class="detail-fact-row">
-          <div class="detail-fact-label">${f.label}</div>
-          <div class="detail-fact-value">${f.value}</div>
-        </div>
-      `).join('')}
-    </div>`;
-  }
-
-  if (card.reassurance) {
-    bodyHTML += `<div class="reassurance">
-      <svg width="14" height="14" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><circle cx="12" cy="16" r="0.6" fill="currentColor"/></svg>
-      <div>${card.reassurance}</div>
-    </div>`;
-  }
-
-  let ctaHTML = '';
-  if (card.cta) {
-    ctaHTML = `
-      <div class="card-cta-row">
-        <button class="card-cta-btn ${card.ctaClass || ''}" onclick="handleCardCta(${idx})">${card.cta}</button>
-        ${card.nextHint ? `
-          <div class="card-next-hint" onclick="advance(1)">
-            <span>${card.nextHint}</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,6 15,12 9,18"/></svg>
-          </div>
-        ` : ''}
-        ${card.secondaryCta ? `<div class="card-cta-secondary" onclick="handleSecondaryCta()">${card.secondaryCta}</div>` : ''}
       </div>
     `;
   }
 
+  // Day-tab pre-header (component D)
+  let preHeaderHTML = '';
+  if (card.dayTabs) {
+    preHeaderHTML += `<div class="day-tabs">`;
+    card.dayTabs.forEach(t => {
+      preHeaderHTML += `<div class="day-tab ${t.state}">${t.label}</div>`;
+    });
+    preHeaderHTML += `</div>`;
+  }
+
+  const pillHTML = card.pill ? `<div class="info-pill">${card.pill}</div>` : '';
+  const titleHTML = card.title ? `<div class="card-title">${card.title}</div>` : '';
+  const subHTML = card.sub ? `<div class="card-sub">${card.sub}</div>` : '';
+  const timeRowHTML = card.timeRow ? `
+    <div class="time-row" style="margin-top:8px;">
+      <svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 15,15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      ${card.timeRow}
+    </div>
+  ` : '';
+
+  // Expert chip
+  const expertHTML = card.expert ? `
+    <div class="expert-chip">
+      <div class="expert-avatar">${card.expert.initials}</div>
+      <div class="expert-name">${card.expert.name}</div>
+    </div>
+  ` : '';
+
+  // Meta row
+  let metaHTML = '';
+  if (card.meta) {
+    metaHTML = `<div class="meta-row">${card.meta.map(m => `
+      <div class="meta-col">
+        <div class="meta-val">${m.val}</div>
+        <div class="meta-lbl">${m.lbl}</div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  // Bullets
+  let bulletsHTML = '';
+  if (card.bullets) {
+    bulletsHTML = `
+      <div class="bullets">
+        ${card.bullets.title ? `<div class="bullets-title">${card.bullets.title}</div>` : ''}
+        ${card.bullets.items.map(it => `
+          <div class="bullet-row">
+            <div class="bullet-dot"></div>
+            <div>${it}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  // Secondary inline link
+  let inlineLinkHTML = '';
+  if (card.secondaryLink) {
+    inlineLinkHTML = `
+      <div class="inline-link" onclick="showToast('Opening full plan')">
+        <span>${card.secondaryLink}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="7,17 17,7"/><polyline points="9,7 17,7 17,15"/></svg>
+      </div>
+    `;
+  }
+
+  // Day-list (Component B)
+  let dayListHTML = '';
+  if (card.days) {
+    dayListHTML = `<div class="day-list">${card.days.map(d => `
+      <div class="day-row ${d.today ? 'today-hl' : ''}">
+        <div class="day-row-title">
+          <span>Day ${d.n} - ${d.title}</span>
+          ${d.today ? `<span class="today-pill">${LEFT_ARROW} Today</span>` : ''}
+        </div>
+        <div class="day-row-author">${d.author}</div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  // Timeline (Component C)
+  let timelineHTML = '';
+  if (card.timeline) {
+    timelineHTML = `<div class="timeline">${card.timeline.map(t => `
+      <div class="tl-item ${t.today ? 'today-hl' : ''}">
+        <div class="tl-num">${t.num}</div>
+        <div class="tl-text">
+          <div class="tl-title">
+            <span>${t.title}</span>
+            ${t.today ? `<span class="today-pill">${LEFT_ARROW} Today</span>` : ''}
+          </div>
+          <div class="tl-sub">${t.sub}</div>
+        </div>
+        <div class="tl-line"></div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  // Day-arc (Component E)
+  let arcHTML = '';
+  if (card.arc) {
+    const a = card.arc;
+    let cells = '';
+    for (let i = 1; i <= a.totalDays; i++) {
+      let cls = '';
+      let circle = '';
+      if (i <= a.completedDays) {
+        cls = 'done-cell';
+        circle = `<div class="arc-circle done">${i}</div>`;
+      } else if (i === a.today) {
+        cls = 'today-cell';
+        circle = `<div class="arc-circle today">D${i}</div>`;
+      } else {
+        circle = `<div class="arc-circle">D${i}</div>`;
+      }
+      cells += `
+        <div class="arc-cell ${cls}">
+          ${circle}
+          <div class="arc-label-lbl">D${i}</div>
+        </div>
+      `;
+    }
+    // Progress connector fill: from start to today
+    const progressPct = Math.max(0, ((a.completedDays - 0.5) / (a.totalDays - 1)) * 84);
+    const fillStyle = a.completedDays > 0 ? `width: ${progressPct.toFixed(1)}%;` : 'width: 0;';
+    arcHTML = `
+      <div class="arc-card">
+        <div class="arc-label">${a.label}</div>
+        <div class="arc-row">
+          <div class="arc-connector"></div>
+          <div class="arc-connector-fill" style="${fillStyle}"></div>
+          ${cells}
+        </div>
+      </div>
+    `;
+  }
+
+  // Nutrition (Component F)
+  let nutritionHTML = '';
+  if (card.sections) {
+    nutritionHTML = card.sections.map(sec => {
+      let inner = '';
+      if (sec.type === 'text') {
+        inner = `<div class="nutri-text">${sec.text}</div>`;
+      } else if (sec.type === 'list') {
+        inner = `<div class="nutri-list">${sec.list.map(item => `
+          <div class="nutri-row ${sec.avoid ? 'avoid' : ''}">
+            <div class="nutri-check"></div>
+            <div class="nutri-row-text">
+              <div class="nutri-row-name">${item.name}</div>
+              <div class="nutri-row-desc">${item.desc}</div>
+            </div>
+          </div>
+        `).join('')}</div>`;
+      }
+      return `
+        <div class="nutri-section">
+          <div class="nutri-section-title">${sec.title}</div>
+          ${inner}
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Confirmation (Card 3 of enroll camps)
+  let confirmHTML = '';
+  if (card.component === 'confirm') {
+    confirmHTML = `
+      <div class="confirm-block">
+        <div class="confirm-emoji">
+          <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="confirm-line">${card.confirmLine || ''}</div>
+        ${card.confirmSub ? `<div class="confirm-sub">${card.confirmSub}</div>` : ''}
+      </div>
+    `;
+  }
+
+  // Reflection prompts
+  let promptsHTML = '';
+  if (card.prompts) {
+    promptsHTML = `<div class="prompt-list">${card.prompts.map((p, i) => `
+      <div class="prompt-row">
+        <div class="prompt-num">${i + 1}</div>
+        <div class="prompt-text">${p}</div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  // CTA row
+  let ctaHTML = '';
+  if (card.cta) {
+    let inner = `<button class="card-cta-btn" onclick="handleCardCta(${idx})">${card.cta}</button>`;
+    if (card.secondaryCta) {
+      inner += `<div class="card-cta-secondary" onclick="handleSecondaryCta(${idx})">${card.secondaryCta}</div>`;
+    }
+    ctaHTML = `<div class="card-cta-row">${inner}</div>`;
+  }
+
+  // Inject palette CSS vars on the card root so every nested component inherits
+  const story = currentStoryKey ? STORIES[currentStoryKey] : null;
+  const paletteKey = (story && story.palette) || 'blue';
+  const paletteStyle = paletteStyleString(paletteKey);
+
   return `
-    <div class="stack-card" data-idx="${idx}">
+    <div class="${cardClasses.join(' ')}" data-idx="${idx}" style="${paletteStyle}">
       <div class="card-body">
         ${heroHTML}
         <div class="card-pad">
+          ${preHeaderHTML}
           ${pillHTML}
           ${titleHTML}
           ${subHTML}
-          ${whenLineHTML}
-          ${bodyHTML}
+          ${timeRowHTML}
+          ${expertHTML}
+          ${metaHTML}
+          ${bulletsHTML}
+          ${dayListHTML}
+          ${timelineHTML}
+          ${arcHTML}
+          ${nutritionHTML}
+          ${confirmHTML}
+          ${promptsHTML}
+          ${inlineLinkHTML}
         </div>
       </div>
       ${ctaHTML}
@@ -2273,199 +2983,150 @@ function renderCardHTML(card, idx) {
   `;
 }
 
+const LEFT_ARROW = '&#8592;';
+
 function updateStackPositions() {
   const cards = document.querySelectorAll('.stack-card');
   cards.forEach((c, i) => {
-    const rel = i - currentCardIdx;
-    let pos;
-    if (rel < 0) pos = 'gone';
-    else if (rel === 0) pos = 'current';
-    else if (rel === 1) pos = 'next';
-    else if (rel === 2) pos = 'next2';
-    else pos = 'hidden';
-    c.setAttribute('data-pos', pos);
-    c.style.transform = '';
-    c.style.opacity = '';
+    let pos = 'hidden';
+    if (i < currentCardIdx) pos = 'gone';
+    else if (i === currentCardIdx) pos = 'current';
+    else if (i === currentCardIdx + 1) pos = 'next';
+    else if (i === currentCardIdx + 2) pos = 'next2';
+    c.dataset.pos = pos;
   });
   document.getElementById('stackPrev').classList.toggle('disabled', currentCardIdx === 0);
-  document.getElementById('stackNext').classList.toggle('disabled', currentCardIdx === totalCards - 1);
-  renderDots();
+  document.getElementById('stackNext').classList.toggle('disabled', currentCardIdx >= totalCards - 1);
 }
 
 function renderDots() {
-  const dotsEl = document.getElementById('stackDots');
-  if (!dotsEl) return;
-  dotsEl.innerHTML = '';
+  const dots = document.getElementById('stackDots');
+  let html = '';
   for (let i = 0; i < totalCards; i++) {
-    const d = document.createElement('div');
-    d.className = 'stack-dot' + (i === currentCardIdx ? ' active' : (i < currentCardIdx ? ' passed' : ''));
-    dotsEl.appendChild(d);
+    let cls = '';
+    if (i < currentCardIdx) cls = 'passed';
+    if (i === currentCardIdx) cls = 'active';
+    html += `<div class="stack-dot ${cls}"></div>`;
   }
+  dots.innerHTML = html;
 }
 
 function advance(dir) {
-  const newIdx = currentCardIdx + dir;
-  if (newIdx < 0 || newIdx >= totalCards) return;
-  currentCardIdx = newIdx;
+  const next = currentCardIdx + dir;
+  if (next < 0 || next >= totalCards) {
+    if (dir > 0 && next >= totalCards) closeStack();
+    return;
+  }
+  currentCardIdx = next;
   updateStackPositions();
+  renderDots();
 }
+
+function handleCardCta(idx) {
+  const card = currentCards[idx];
+  if (!card) return;
+
+  // Enroll behavior on the last card of enroll camps
+  if (currentStoryKey && (currentStoryKey === 'kids' || currentStoryKey === 'women' || currentStoryKey === 'marma' || currentStoryKey === 'surya') && card.component === 'confirm') {
+    state.enrolled[currentStoryKey] = true;
+    saveState();
+    renderUpcoming();
+  }
+
+  showToast(card.toastOnCta || 'Done');
+
+  // Advance or close
+  if (idx < totalCards - 1) {
+    advance(1);
+  } else {
+    setTimeout(closeStack, 350);
+  }
+}
+
+function handleSecondaryCta(idx) {
+  showToast('Saved');
+  setTimeout(closeStack, 250);
+}
+
+/* ============================================================
+   SWIPE
+   ============================================================ */
+
+let swipeStartX = 0;
+let swipeStartY = 0;
+let swipeDeltaX = 0;
+let isSwiping = false;
+let swipeCardEl = null;
 
 function attachSwipe() {
   const cards = document.querySelectorAll('.stack-card');
   cards.forEach(card => {
-    let startX = 0, startY = 0, currentX = 0, dragging = false;
-    let startTime = 0;
-
-    const onStart = (e) => {
-      if (card.getAttribute('data-pos') !== 'current') return;
-      if (e.target.closest('button, .card-cta-secondary, .step-row, .day-list-row, .who-row, .surya-tl-row, .surya-pnode')) return;
-      const pt = e.touches ? e.touches[0] : e;
-      startX = pt.clientX;
-      startY = pt.clientY;
-      startTime = Date.now();
-      dragging = true;
-      card.classList.add('dragging');
-    };
-
-    const onMove = (e) => {
-      if (!dragging) return;
-      const pt = e.touches ? e.touches[0] : e;
-      const dx = pt.clientX - startX;
-      const dy = pt.clientY - startY;
-      if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 14) {
-        dragging = false;
-        card.classList.remove('dragging');
-        card.style.transform = '';
-        const nb = card.querySelector('.swipe-badge.next');
-        const pb = card.querySelector('.swipe-badge.prev');
-        if (nb) nb.style.opacity = '0';
-        if (pb) pb.style.opacity = '0';
-        return;
-      }
-      currentX = dx;
-      const rot = dx / 22;
-      card.style.transform = `translateX(${dx}px) rotate(${rot}deg)`;
-      const nextBadge = card.querySelector('.swipe-badge.next');
-      const prevBadge = card.querySelector('.swipe-badge.prev');
-      if (dx < -40) {
-        nextBadge.style.opacity = Math.min(1, Math.abs(dx) / 100);
-        prevBadge.style.opacity = '0';
-      } else if (dx > 40) {
-        prevBadge.style.opacity = Math.min(1, Math.abs(dx) / 100);
-        nextBadge.style.opacity = '0';
-      } else {
-        nextBadge.style.opacity = '0';
-        prevBadge.style.opacity = '0';
-      }
-      if (e.cancelable) e.preventDefault();
-    };
-
-    const onEnd = (e) => {
-      if (!dragging) return;
-      dragging = false;
-      card.classList.remove('dragging');
-      const dx = currentX;
-      const dt = Date.now() - startTime;
-      const velocity = Math.abs(dx) / dt;
-      const nextBadge = card.querySelector('.swipe-badge.next');
-      const prevBadge = card.querySelector('.swipe-badge.prev');
-      if (nextBadge) nextBadge.style.opacity = '0';
-      if (prevBadge) prevBadge.style.opacity = '0';
-
-      if ((dx < -100 || (dx < -50 && velocity > 0.5)) && currentCardIdx < totalCards - 1) {
-        card.style.transform = `translateX(-120%) rotate(-12deg)`;
-        card.style.opacity = '0';
-        setTimeout(() => {
-          card.style.transform = '';
-          card.style.opacity = '';
-          advance(1);
-        }, 250);
-      } else if ((dx > 100 || (dx > 50 && velocity > 0.5)) && currentCardIdx > 0) {
-        card.style.transform = `translateX(120%) rotate(12deg)`;
-        card.style.opacity = '0';
-        setTimeout(() => {
-          card.style.transform = '';
-          card.style.opacity = '';
-          advance(-1);
-        }, 250);
-      } else {
-        card.style.transform = '';
-      }
-      currentX = 0;
-    };
-
-    card.addEventListener('mousedown', onStart);
-    card.addEventListener('touchstart', onStart, {passive: true});
-    card.addEventListener('mousemove', onMove);
-    card.addEventListener('touchmove', onMove, {passive: false});
-    card.addEventListener('mouseup', onEnd);
-    card.addEventListener('mouseleave', onEnd);
-    card.addEventListener('touchend', onEnd);
-    card.addEventListener('touchcancel', onEnd);
+    card.addEventListener('pointerdown', onPointerDown);
   });
 }
 
-function handleSecondaryCta() {
-  showToast('Opening...');
+function onPointerDown(e) {
+  if (e.target.closest('button')) return;
+  const cardEl = e.currentTarget;
+  if (cardEl.dataset.pos !== 'current') return;
+  swipeCardEl = cardEl;
+  swipeStartX = e.clientX;
+  swipeStartY = e.clientY;
+  swipeDeltaX = 0;
+  isSwiping = true;
+  cardEl.classList.add('dragging');
+  document.addEventListener('pointermove', onPointerMove);
+  document.addEventListener('pointerup', onPointerUp);
+  document.addEventListener('pointercancel', onPointerUp);
 }
 
-function handleCardCta(idx) {
-  const s = STORIES[currentStoryKey];
-  const card = currentCards[idx];
-
-  if (card.closeOnCta) {
-    closeStack();
+function onPointerMove(e) {
+  if (!isSwiping || !swipeCardEl) return;
+  swipeDeltaX = e.clientX - swipeStartX;
+  const dy = e.clientY - swipeStartY;
+  if (Math.abs(dy) > Math.abs(swipeDeltaX) * 1.5) {
+    isSwiping = false;
     return;
   }
+  const rot = swipeDeltaX * 0.04;
+  swipeCardEl.style.transform = `translateX(${swipeDeltaX}px) rotate(${rot}deg)`;
+  const nextBadge = swipeCardEl.querySelector('.swipe-badge.next');
+  const prevBadge = swipeCardEl.querySelector('.swipe-badge.prev');
+  if (swipeDeltaX < -30) { nextBadge.style.opacity = Math.min(1, Math.abs(swipeDeltaX) / 100); prevBadge.style.opacity = 0; }
+  else if (swipeDeltaX > 30) { prevBadge.style.opacity = Math.min(1, swipeDeltaX / 100); nextBadge.style.opacity = 0; }
+  else { nextBadge.style.opacity = 0; prevBadge.style.opacity = 0; }
+}
 
-  if (card.enrollOnCta && s.enrollKey) {
-    state.enrolled[s.enrollKey] = true;
-    saveState();
-    showEnrollConfirm(s);
-    setTimeout(() => {
-      hideEnrollConfirm();
-      closeStack();
-      renderUpcoming();
-      renderStories();
-    }, 1800);
-    return;
+function onPointerUp() {
+  if (!swipeCardEl) return;
+  swipeCardEl.classList.remove('dragging');
+  swipeCardEl.style.transform = '';
+  const nextBadge = swipeCardEl.querySelector('.swipe-badge.next');
+  const prevBadge = swipeCardEl.querySelector('.swipe-badge.prev');
+  if (nextBadge) nextBadge.style.opacity = 0;
+  if (prevBadge) prevBadge.style.opacity = 0;
+  document.removeEventListener('pointermove', onPointerMove);
+  document.removeEventListener('pointerup', onPointerUp);
+  document.removeEventListener('pointercancel', onPointerUp);
+  if (Math.abs(swipeDeltaX) > 80) {
+    advance(swipeDeltaX < 0 ? 1 : -1);
   }
-
-  if (idx < totalCards - 1) {
-    advance(1);
-  } else {
-    showToast('Opening ' + card.cta);
-    setTimeout(closeStack, 700);
-  }
+  swipeCardEl = null;
+  isSwiping = false;
 }
 
-function showEnrollConfirm(s) {
-  document.getElementById('enrollTitle').textContent = "You're in!";
-  document.getElementById('enrollSub').textContent = `${s.label} added to your Upcoming list. We'll send a reminder.`;
-  document.getElementById('enrollOverlay').classList.add('active');
-  fillConfetti(18);
-}
+/* Keyboard arrows */
+document.addEventListener('keydown', (e) => {
+  const overlay = document.getElementById('cardstackOverlay');
+  if (!overlay.classList.contains('active')) return;
+  if (e.key === 'ArrowRight') advance(1);
+  if (e.key === 'ArrowLeft') advance(-1);
+  if (e.key === 'Escape') closeStack();
+});
 
-function fillConfetti(count) {
-  const cf = document.getElementById('enrollConfetti');
-  cf.innerHTML = '';
-  const colors = ['#C9924A', '#B68A3C', '#B57894', '#A88641', '#6B7C8E', '#8FA968'];
-  for (let i = 0; i < count; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.background = colors[i % colors.length];
-    const angle = (i / count) * Math.PI * 2;
-    const dist = 85 + Math.random() * 65;
-    piece.style.setProperty('--tx', `${Math.cos(angle) * dist - 4}px`);
-    piece.style.setProperty('--ty', `${Math.sin(angle) * dist - 7}px`);
-    piece.style.setProperty('--rot', `${Math.random() * 720}deg`);
-    cf.appendChild(piece);
-  }
-}
-
-function hideEnrollConfirm() {
-  document.getElementById('enrollOverlay').classList.remove('active');
-}
+/* ============================================================
+   TOAST
+   ============================================================ */
 
 let toastTimer = null;
 function showToast(msg) {
@@ -2473,19 +3134,16 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('visible');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('visible'), 2400);
+  toastTimer = setTimeout(() => t.classList.remove('visible'), 1800);
 }
 
-document.addEventListener('keydown', (e) => {
-  if (!document.getElementById('cardstackOverlay').classList.contains('active')) return;
-  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); advance(1); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); advance(-1); }
-  if (e.key === 'Escape') closeStack();
-});
+/* ============================================================
+   INIT
+   ============================================================ */
 
 renderStories();
 renderUpcoming();
-renderMissed();
+renderRecorded();
 </script>
 
 </body>
