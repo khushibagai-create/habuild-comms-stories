@@ -282,6 +282,33 @@
   .story-thumb.t-recovery  { background: linear-gradient(160deg, #E7EAEE, #B7BFC9); }
   .story-thumb.t-2271      { background: linear-gradient(160deg, #F0E0BC, #C7A66B); }
   .story-thumb.t-reflect   { background: linear-gradient(160deg, #E5DEEF, #B7A8D0); }
+  .story-thumb.t-cert      { background: linear-gradient(160deg, #FEF3C7, #C99D60); }
+  .story-thumb.t-tools     { background: linear-gradient(160deg, #DBEAFE, #7DD3FC); }
+  .story-thumb.t-today     { background: linear-gradient(160deg, #FEF3C7, #F59E0B); }
+
+  /* Pinned daily share. Sits first in the rail. Gold ring + corner pin. */
+  .story-ring.pinned-today { position: relative; }
+  .story-ring.pinned-today::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: #9A6009;
+    border: 2px solid var(--white);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M11 1.5l3.5 3.5-1.6 0.8L11 8l1 4-1.6 0.8L8 9.8l-3 3-0.8-0.8 3-3L4.4 6.4l0.8-1.6L8.2 5l2.2-2.5z' fill='white'/></svg>");
+    background-size: 12px 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 3;
+    box-shadow: 0 2px 4px rgba(15,23,42,0.2);
+  }
+  .story-ring.pinned-today .ring-svg circle { stroke: #9A6009 !important; }
+  /* Pinned never goes to gray-viewed state */
+  .story-ring.pinned-today.viewed .ring-svg circle { stroke: #9A6009 !important; }
+  .story-ring.pinned-today.viewed .story-thumb { opacity: 1; filter: none; }
+  .story-ring.pinned-today.viewed + .story-label { color: #0F172A; font-weight: 600; }
 
   .story-label {
     font-size: 11.5px;
@@ -602,6 +629,284 @@
   }
   .stack-card.has-hero-image::before,
   .stack-card.has-completion-hero::before { display: none; }
+  /* TODAY: full-bleed poster, no gradient overlay, no padding around the image */
+  .stack-card.today-stack-card::before { display: none; }
+  .today-card-body {
+    padding: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .today-poster-bleed {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    background: linear-gradient(160deg, #FBBF24 0%, #F59E0B 40%, #9A6009 100%);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .today-poster-bleed::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(2.5px 2.5px at 20% 16%, rgba(255,255,255,0.6), transparent 60%),
+      radial-gradient(2.5px 2.5px at 75% 30%, rgba(255,255,255,0.4), transparent 60%),
+      radial-gradient(2px 2px   at 40% 80%, rgba(255,255,255,0.45),transparent 60%),
+      radial-gradient(2px 2px   at 85% 72%, rgba(255,255,255,0.35),transparent 60%);
+    pointer-events: none;
+  }
+  .today-poster-placeholder {
+    font-size: 42px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 5px;
+    text-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 1;
+  }
+  .today-poster-date {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(15, 23, 42, 0.85);
+    color: #FFFFFF;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 999px;
+    letter-spacing: 1.2px;
+    z-index: 2;
+    backdrop-filter: blur(4px);
+  }
+  .today-cta-row { padding: 12px 16px 16px; display: flex; flex-direction: column; gap: 10px; }
+  .today-primary-btn { gap: 8px; }
+  .today-secondary-pill {
+    width: 100%;
+    height: 42px;
+    background: #FFFFFF;
+    color: var(--p-cta);
+    border: 1.5px solid #CBD5E1;
+    border-radius: 999px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s, border-color .15s;
+  }
+  .today-secondary-pill:hover { background: #F8FAFC; border-color: var(--p-cta); }
+  .today-secondary-pill:active { transform: scale(0.97); }
+
+  /* Heading + subheading inside the white today card, BELOW the poster (caption-style) */
+  .today-text-block {
+    padding: 12px 16px 4px;
+    background: #FFFFFF;
+    flex-shrink: 0;
+  }
+  .today-text-block .ttb-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--p-cta);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .today-text-block .ttb-heading {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #0F172A;
+    letter-spacing: -0.01em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .today-text-block .ttb-sub {
+    margin-top: 4px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: #64748B;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Real image inside the poster — absolute-fill so no gradient bg leaks */
+  .today-poster-bleed img.poster-img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 0;
+  }
+  .today-poster-bleed.has-img { background: #0F172A; }
+  .today-poster-bleed.has-img::before { display: none; }
+
+  /* Quiz block sits between caption and CTA row */
+  .today-quiz-block {
+    padding: 8px 16px 4px;
+    background: #FFFFFF;
+    display: flex; flex-direction: column; gap: 6px;
+    flex-shrink: 0;
+  }
+  .today-quiz-options { display: flex; flex-direction: column; gap: 6px; }
+  .today-quiz-opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px;
+    border: 1px solid #CBD5E1;
+    border-radius: 999px;
+    font-size: 12.5px; font-weight: 500;
+    color: #0F172A;
+    background: #FFFFFF;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background .15s, border-color .15s, color .15s;
+    text-align: left;
+    width: 100%;
+  }
+  .today-quiz-opt .opt-text { flex: 1; }
+  .today-quiz-opt .opt-mark { width: 14px; height: 14px; flex: none; display: grid; place-items: center; }
+  .today-quiz-opt:hover { background: #F8FAFC; border-color: var(--p-cta); }
+  .today-quiz-opt:active { transform: scale(0.98); }
+  .today-quiz-opt .opt-letter {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--p-cta);
+    color: #FFFFFF;
+    font-size: 11px; font-weight: 700;
+    display: grid; place-items: center;
+    flex: none;
+    transition: background .15s;
+  }
+  /* Locked answered state */
+  .today-quiz-opt.is-correct {
+    background: #ECFDF5;
+    border-color: #10B981;
+    color: #065F46;
+  }
+  .today-quiz-opt.is-correct .opt-letter { background: #10B981; }
+  .today-quiz-opt.is-correct .opt-mark::after {
+    content: '';
+    width: 12px; height: 12px;
+    background: no-repeat center/contain url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310B981' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+  }
+  .today-quiz-opt.is-wrong {
+    background: #FEF2F2;
+    border-color: #FCA5A5;
+    color: #991B1B;
+  }
+  .today-quiz-opt.is-wrong .opt-letter { background: #EF4444; }
+  .today-quiz-opt.is-wrong .opt-mark::after {
+    content: '';
+    width: 12px; height: 12px;
+    background: no-repeat center/contain url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23EF4444' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg>");
+  }
+  .today-quiz-block.is-locked .today-quiz-opt { cursor: default; pointer-events: none; }
+  .today-quiz-block.is-locked .today-quiz-opt:not(.is-correct):not(.is-wrong) { opacity: 0.55; }
+
+  /* Hint */
+  .today-quiz-hint-wrap { padding-top: 2px; }
+  .today-quiz-hint-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px;
+    background: transparent;
+    border: 1px solid #E2E8F0;
+    color: #64748B;
+    font-family: var(--font);
+    font-size: 11.5px; font-weight: 600;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .12s, color .12s, border-color .12s;
+  }
+  .today-quiz-hint-btn:hover { background: #F8FAFC; color: var(--p-cta); border-color: var(--p-cta); }
+  .today-quiz-hint-btn.is-open { background: #F1F5F9; color: #334155; }
+  .today-quiz-hint-text {
+    margin-top: 6px;
+    padding: 8px 10px;
+    background: #F8FAFC;
+    border-left: 2px solid var(--p-cta);
+    border-radius: 6px;
+    font-size: 11.5px; line-height: 1.45;
+    color: #475569;
+  }
+
+  /* Result line shown after answer */
+  .today-quiz-result {
+    margin-top: 4px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 11.5px; line-height: 1.4;
+    font-weight: 500;
+  }
+  .today-quiz-result.is-correct { background: #ECFDF5; color: #065F46; }
+  .today-quiz-result.is-wrong { background: #FEF2F2; color: #991B1B; }
+  /* When a quiz block is present, the poster takes a fixed share of the card
+     so options have room to breathe. */
+  .today-card-body:has(.today-quiz-block) .today-poster-bleed {
+    flex: 0 0 32%;
+    min-height: 120px;
+  }
+  .today-card-body:has(.today-quiz-block) .today-text-block {
+    padding: 10px 16px 2px;
+  }
+  .today-card-body:has(.today-quiz-block) .today-text-block .ttb-heading {
+    font-size: 13.5px;
+    -webkit-line-clamp: 2;
+  }
+  .today-card-body:has(.today-quiz-block) .today-text-block .ttb-sub { display: none; }
+
+  /* Video play overlay + duration badge + credit */
+  .today-poster-bleed.is-video::before { opacity: 0.25; }
+  .today-poster-bleed .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid; place-items: center;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .today-poster-bleed .play-overlay .play-circle {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    display: grid; place-items: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+  .today-poster-bleed .play-overlay .play-circle svg {
+    width: 28px; height: 28px;
+    fill: #0F172A;
+    margin-left: 4px;
+  }
+  .today-poster-bleed .video-duration-pill {
+    position: absolute;
+    right: 14px; bottom: 14px;
+    background: rgba(15,23,42,0.85);
+    color: #FFFFFF;
+    font-size: 11px; font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    z-index: 3;
+    letter-spacing: 0.3px;
+    backdrop-filter: blur(4px);
+  }
+  .today-video-credit {
+    font-size: 11px;
+    color: #64748B;
+    padding: 10px 16px 0;
+    background: #FFFFFF;
+    text-align: center;
+    font-style: italic;
+    flex-shrink: 0;
+  }
+  .card-cta-btn.today-watch-btn { background: #0F172A !important; }
 
   .card-body {
     position: relative;
@@ -1549,14 +1854,21 @@
 
 <script>
 const LS_KEY = 'habuild_stories_v4_manish_v1';
+// Prior Today stories seed as viewed so they render in the muted state.
+const DEFAULT_VIEWED = {
+  todayBreakfast: true,
+  todayCheela: true,
+  todayIndiaGate: true,
+  todayIITStory: true,
+};
 let state = {
-  viewed: {},
+  viewed: { ...DEFAULT_VIEWED },
   enrolled: { surya: true, marma: true },
   selections: {}
 };
 try {
   const stored = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
-  if (stored) state = { viewed: {}, enrolled: { surya: true, marma: true }, selections: {}, ...stored };
+  if (stored) state = { viewed: { ...DEFAULT_VIEWED }, enrolled: { surya: true, marma: true }, selections: {}, ...stored };
 } catch(e) {}
 
 function saveState() {
@@ -1565,7 +1877,7 @@ function saveState() {
 
 function resetAll() {
   localStorage.removeItem(LS_KEY);
-  state = { viewed: {}, enrolled: { surya: true, marma: true }, selections: {} };
+  state = { viewed: { ...DEFAULT_VIEWED }, enrolled: { surya: true, marma: true }, selections: {} };
   renderStories();
   renderUpcoming();
   renderRecorded();
@@ -1639,10 +1951,21 @@ const RING_2271 = `<svg viewBox="0 0 32 32" fill="none" stroke="#8B7236" stroke-
   <line x1="12" y1="26" x2="20" y2="26"/>
 </svg>`;
 
+const RING_CERT = `<svg viewBox="0 0 32 32" fill="none" stroke="#9A6009" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="16" cy="13" r="6"/>
+  <path d="M12 18l-2 9 6-4 6 4-2-9"/>
+</svg>`;
+const RING_TOOLS = `<svg viewBox="0 0 32 32" fill="none" stroke="#0369A1" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M19 8a4 4 0 1 1 4 4l-9 9-4 1 1-4 9-9z"/>
+  <path d="M6 26l3-1"/>
+</svg>`;
 const RING_REFLECT = `<svg viewBox="0 0 32 32" fill="none" stroke="#76699A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
   <circle cx="16" cy="14" r="6"/>
   <path d="M16 14 c1 -1 3 -2 5 -2"/>
   <path d="M8 26 Q16 22 24 26"/>
+</svg>`;
+const RING_TODAY = `<svg viewBox="0 0 32 32" fill="#9A6009" stroke="#9A6009" stroke-width="0.8" stroke-linejoin="round">
+  <path d="M16 6l2.2 6.7H25l-5.4 4 2.1 6.7L16 19.3l-5.7 4.1 2.1-6.7L7 12.7h6.8z"/>
 </svg>`;
 
 /* Hero SVGs (per story) */
@@ -1843,6 +2166,18 @@ const PALETTES = {
     pillText: '#FFFFFF',
     ctaText: '#FFFFFF',
   },
+  gold: {
+    name: 'Gold',
+    cta: '#9A6009',
+    dark: '#6E4506',
+    mid: '#8A6A35',
+    light: '#C99D60',
+    gradientTop: '#FEF8EE',
+    statBg: '#FAF3E5',
+    todayPill: '#9A6009',
+    pillText: '#FFFFFF',
+    ctaText: '#FFFFFF',
+  },
 };
 
 function paletteStyleString(key) {
@@ -1866,6 +2201,178 @@ function paletteStyleString(key) {
    ============================================================ */
 
 const STORIES = {
+
+  /* 0. Today. Pinned daily share. Always first in the story rail.
+     Currently showing the Better Snack quiz (variation: quiz). */
+  today: {
+    label: 'Today',
+    pinned: true,
+    template: 'today',
+    palette: 'gold',
+    ringClass: 'pinned-today',
+    thumbClass: 't-today',
+    thumbSvg: RING_TODAY,
+    authorAvatar: 'KS',
+    authorAvatarBg: 'linear-gradient(135deg, #F59E0B, #9A6009)',
+    authorName: "Today's share",
+    authorTime: 'Pinned · Quiz',
+    cards: [
+      {
+        component: 'today',
+        variation: 'quiz',
+        eyebrow: "Today's quiz",
+        heading: 'Why can makhana be a better snack than biscuits?',
+        posterImage: 'today-template-refs/Habuild CRM April 2026.png',
+        dateLabel: '10 JUN',
+        posterLabel: 'Better Snack quiz',
+        quizOptions: [
+          'It is lighter and less processed',
+          'It is always more expensive',
+          'It has more sugar',
+        ],
+        quizCorrect: 'A',
+        quizHintEnabled: true,
+        quizHint: 'Think about how the snack is made. The less processed the food, the gentler it is on your gut and energy.',
+        quizCorrectMessage: 'Correct. Makhana is roasted, light, and low on processing. A good evening swap.',
+        quizWrongMessage: 'Not quite. Makhana wins because it is lighter and less processed than biscuits.',
+        cta: 'Share',
+        toastOnCta: 'Opening WhatsApp share sheet'
+      }
+    ]
+  },
+
+  /* 0a. Today: Better Breakfast quiz (expired, shown as viewed) */
+  todayBreakfast: {
+    label: 'Yesterday',
+    template: 'today',
+    palette: 'gold',
+    ringClass: 'r-cert',
+    thumbClass: 't-today',
+    thumbSvg: RING_TODAY,
+    authorAvatar: 'KS',
+    authorAvatarBg: 'linear-gradient(135deg, #F59E0B, #9A6009)',
+    authorName: "Today's share",
+    authorTime: 'Quiz · 09 Jun',
+    cards: [
+      {
+        component: 'today',
+        variation: 'quiz',
+        eyebrow: "Yesterday's quiz",
+        heading: 'Is breakfast important to give energy after waking up?',
+        posterImage: 'today-template-refs/Habuild CRM April 13 2026.png',
+        dateLabel: '09 JUN',
+        posterLabel: 'Better Breakfast quiz',
+        quizOptions: [
+          'Yes, it refuels the body after a night of fasting',
+          'No, skipping is always better',
+          'Only on weekends',
+        ],
+        quizCorrect: 'A',
+        quizHintEnabled: true,
+        quizHint: 'Your body has fasted for 8 to 10 hours overnight. Glucose stores are low when you wake up.',
+        quizCorrectMessage: 'Correct. A simple breakfast refuels glucose stores and steadies energy.',
+        quizWrongMessage: 'Not quite. Breakfast refuels the body after the overnight fast.',
+        cta: 'Share',
+        toastOnCta: 'Opening WhatsApp share sheet'
+      }
+    ]
+  },
+
+  /* 0b. Today: Besan-Millet Cheela recipe (poster, expired) */
+  todayCheela: {
+    label: 'Cheela',
+    template: 'today',
+    palette: 'gold',
+    ringClass: 'r-cert',
+    thumbClass: 't-today',
+    thumbSvg: RING_TODAY,
+    authorAvatar: 'KS',
+    authorAvatarBg: 'linear-gradient(135deg, #F59E0B, #9A6009)',
+    authorName: "Today's share",
+    authorTime: 'Poster · 08 Jun',
+    cards: [
+      {
+        component: 'today',
+        variation: 'poster',
+        eyebrow: 'Better Breakfast',
+        heading: 'Besan-Millet Veggie Cheela',
+        subheading: 'Quick, nourishing, and gentle on the gut.',
+        posterImage: 'today-template-refs/Habuild CRM Image.jpeg',
+        dateLabel: '08 JUN',
+        posterLabel: 'Besan-Millet Cheela',
+        secondaryCta: 'Open recipe',
+        secondaryCtaUrl: '/recipes/cheela',
+        cta: 'Share',
+        toastOnCta: 'Opening WhatsApp share sheet',
+        toastOnSecondary: 'Opening the cheela recipe'
+      }
+    ]
+  },
+
+  /* 0c. Today: India Gate poster (poster, expired) */
+  todayIndiaGate: {
+    label: 'Rishton jaisi',
+    template: 'today',
+    palette: 'gold',
+    ringClass: 'r-cert',
+    thumbClass: 't-today',
+    thumbSvg: RING_TODAY,
+    authorAvatar: 'KS',
+    authorAvatarBg: 'linear-gradient(135deg, #F59E0B, #9A6009)',
+    authorName: "Today's share",
+    authorTime: 'Poster · 07 Jun',
+    cards: [
+      {
+        component: 'today',
+        variation: 'poster',
+        eyebrow: 'Thought for today',
+        heading: 'Health bhi rishton jaisi hai',
+        subheading: 'Care for it, and it cares for you.',
+        posterImage: 'today-template-refs/Habuild CRM Image (8).jpeg',
+        dateLabel: '07 JUN',
+        posterLabel: 'India Gate poster',
+        secondaryCta: 'Join 21-Day Yoga',
+        secondaryCtaUrl: 'habit.yoga/anitarodrigues_ebi48',
+        cta: 'Share',
+        toastOnCta: 'Opening WhatsApp share sheet',
+        toastOnSecondary: 'Opening the 21-Day Yoga signup'
+      }
+    ]
+  },
+
+  /* 0d. Today: IIT story video (video, expired) */
+  todayIITStory: {
+    label: 'IIT story',
+    template: 'today',
+    palette: 'gold',
+    ringClass: 'r-cert',
+    thumbClass: 't-today',
+    thumbSvg: RING_TODAY,
+    authorAvatar: 'KS',
+    authorAvatarBg: 'linear-gradient(135deg, #F59E0B, #9A6009)',
+    authorName: "Today's share",
+    authorTime: 'Video · 06 Jun',
+    cards: [
+      {
+        component: 'today',
+        variation: 'video',
+        eyebrow: 'Story of Habuild · 3 min',
+        heading: '15 lakh people started their health journey in 7 days',
+        subheading: 'Watch the story behind the community.',
+        posterImage: 'today-template-refs/Habuild CRM Image (6).jpeg',
+        dateLabel: '06 JUN',
+        posterLabel: 'IIT story video',
+        videoUrl: 'https://youtube.com/shorts/example',
+        videoDuration: '3 min',
+        videoCredit: 'News credit: The Better India',
+        secondaryCta: 'Join 21-Day Yoga',
+        secondaryCtaUrl: 'habit.yoga/anitarodrigues_ebi48',
+        cta: 'Watch',
+        toastOnCta: 'Playing the IIT story',
+        toastOnSecondary: 'Opening the 21-Day Yoga signup'
+      }
+    ]
+  },
 
   /* 1. Today: Day 3 of Marma — Daily Update template (3 cards) */
   marma: {
@@ -2469,6 +2976,82 @@ const STORIES = {
     ]
   },
 
+  /* 12. Surya certificate ready — Certificate template (1 card) */
+  cert: {
+    label: 'Surya certificate',
+    palette: 'gold',
+    ringClass: 'r-cert',
+    thumbClass: 't-cert',
+    thumbSvg: RING_CERT,
+    authorAvatar: 'HB',
+    authorAvatarBg: 'linear-gradient(135deg, #C99D60, #6E4506)',
+    authorName: 'Habuild · Surya Namaskar',
+    authorTime: 'Workshop complete',
+    cards: [
+      {
+        component: 'certificate',
+        pill: 'WORKSHOP COMPLETE',
+        title: 'You completed Surya Namaskar',
+        sub: 'Claim your participation certificate. We are proud of your consistency.',
+        certStats: [
+          { label: 'Sessions attended', value: '5/5' },
+          { label: 'Total rounds',      value: '300' },
+          { label: 'No-Zero Days',      value: '5' }
+        ],
+        cta: 'Claim certificate',
+        secondaryCta: 'Watch recordings',
+        toastOnCta: 'Opening certificate'
+      }
+    ]
+  },
+
+  /* 13. Create Everyday launch — Tools template (2 cards) */
+  tools: {
+    label: 'Create Everyday',
+    palette: 'blue',
+    ringClass: 'r-tools',
+    thumbClass: 't-tools',
+    thumbSvg: RING_TOOLS,
+    authorAvatar: 'HB',
+    authorAvatarBg: 'linear-gradient(135deg, #7DD3FC, #0369A1)',
+    authorName: 'Habuild · New Tool',
+    authorTime: 'Launched today',
+    cards: [
+      {
+        component: 'tools-hero',
+        hasHeroImage: true,
+        heroSvg: HERO_RECOVERY,
+        pill: 'NEW · TOOL',
+        title: 'Create Everyday',
+        sub: 'A daily poster maker for your habit moments. Share with family on WhatsApp.',
+        bullets: {
+          title: 'What you get',
+          items: [
+            '6 hand-drawn templates',
+            'Auto-filled with your No-Zero day',
+            'One tap to share on WhatsApp',
+            'Save to phone gallery'
+          ]
+        },
+        cta: 'Open tool',
+        toastOnCta: 'Opening Create Everyday'
+      },
+      {
+        component: 'tools-howto',
+        pill: 'HOW IT WORKS',
+        title: 'Three steps to your card',
+        sub: 'Pick, write, send. No design skills needed.',
+        timeline: [
+          { num: 1, title: 'Choose a template', sub: 'Six hand-drawn cards to start with.' },
+          { num: 2, title: 'Add your message',  sub: 'In any language. Hindi or English.', today: true },
+          { num: 3, title: 'Send via WhatsApp', sub: 'Or save and print at home.' }
+        ],
+        cta: 'Open tool',
+        toastOnCta: 'Opening Create Everyday'
+      }
+    ]
+  },
+
   /* 11. June reflection — Mass Event Card 2 pattern with 3 prompts */
   reflect: {
     label: 'June reflection',
@@ -2501,7 +3084,14 @@ const STORIES = {
 };
 
 const STORY_ORDER = [
-  'marma',     // Today's session — top priority
+  'today',           // Pinned daily share. ALWAYS first regardless of viewed state
+  'marma',           // Today's session — top priority
+  'cert',            // Surya certificate ready — celebratory, fresh
+  'tools',           // Create Everyday launch — new tool announcement
+  'todayBreakfast',  // Prior Today: Better Breakfast quiz
+  'todayCheela',     // Prior Today: Besan-Millet Cheela recipe
+  'todayIndiaGate',  // Prior Today: India Gate poster
+  'todayIITStory',   // Prior Today: IIT story video
   'surya',
   'kids',
   'women',
@@ -2520,13 +3110,22 @@ const STORY_ORDER = [
 
 function renderStories() {
   const row = document.getElementById('storiesRow');
-  const unviewed = STORY_ORDER.filter(k => !state.viewed[k]);
-  const viewed   = STORY_ORDER.filter(k =>  state.viewed[k]);
-  const ordered  = [...unviewed, ...viewed];
+  // Pinned stories (e.g. Today) ALWAYS sit first, regardless of viewed state.
+  const pinned   = STORY_ORDER.filter(k => STORIES[k] && STORIES[k].pinned);
+  const rest     = STORY_ORDER.filter(k => !(STORIES[k] && STORIES[k].pinned));
+  const unviewed = rest.filter(k => !state.viewed[k]);
+  const viewed   = rest.filter(k =>  state.viewed[k]);
+  const ordered  = [...pinned, ...unviewed, ...viewed];
   row.innerHTML = ordered.map(key => {
     const s = STORIES[key];
     const isViewed = state.viewed[key];
-    const ringClass = isViewed ? 'viewed' : s.ringClass;
+    // Pinned stories keep their ring class even when viewed (CSS handles styling).
+    let ringClass;
+    if (s.pinned) {
+      ringClass = s.ringClass + (isViewed ? ' viewed' : '');
+    } else {
+      ringClass = isViewed ? 'viewed' : s.ringClass;
+    }
     const r = 28;
     const circumference = 2 * Math.PI * r;
     const n = Math.max(1, s.cards.length);
@@ -2700,6 +3299,110 @@ function renderStackCards() {
 }
 
 function renderCardHTML(card, idx) {
+  // ---------- TODAY (daily share) — 3 variations: poster / quiz / video ----------
+  if (card.component === 'today') {
+    const story = currentStoryKey ? STORIES[currentStoryKey] : null;
+    const paletteKey = (story && story.palette) || 'gold';
+    const paletteStyle = paletteStyleString(paletteKey);
+    const variation = card.variation || 'poster';
+    const dateLabel = (card.dateLabel || '').trim();
+    const secondary = card.secondaryCta || 'Open';
+    const heading = card.heading || "Today's share";
+    const subheading = card.subheading || '';
+    const hasImg = !!card.posterImage;
+
+    // Poster content (real image if provided, placeholder otherwise)
+    const posterInner = hasImg
+      ? `<img class="poster-img" src="${encodeURI(card.posterImage)}" alt="${escapeAttr(heading)}" />`
+      : `<div class="today-poster-placeholder">POSTER</div>`;
+
+    // Variation-specific overlays on poster
+    let posterClass = hasImg ? 'has-img' : '';
+    let posterExtras = dateLabel ? `<div class="today-poster-date">${dateLabel}</div>` : '';
+    if (variation === 'video') {
+      posterClass += ' is-video';
+      posterExtras += `
+        <div class="play-overlay"><div class="play-circle">
+          <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+        </div></div>
+        <div class="video-duration-pill">${escapeAttr(card.videoDuration || '3 min')}</div>
+      `;
+    }
+
+    // Quiz block (sits between poster and CTAs)
+    let quizBlock = '';
+    if (variation === 'quiz') {
+      const opts = (card.quizOptions || []).slice(0, 4);
+      const optsHtml = opts.map((opt, i) => {
+        const letter = String.fromCharCode(65 + i);
+        return `<button type="button" class="today-quiz-opt" data-letter="${letter}" onclick="handleQuizOptionTap(${idx}, '${letter}', this)"><span class="opt-letter">${letter}</span><span class="opt-text">${escapeAttr(opt || ('Option ' + letter))}</span><span class="opt-mark"></span></button>`;
+      }).join('');
+      const hintText = card.quizHint || '';
+      const hintHtml = (card.quizHintEnabled && hintText) ? `
+        <div class="today-quiz-hint-wrap">
+          <button type="button" class="today-quiz-hint-btn" onclick="toggleQuizHint(${idx}, this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Show hint
+          </button>
+          <div class="today-quiz-hint-text" hidden>${escapeAttr(hintText)}</div>
+        </div>` : '';
+      quizBlock = `
+        <div class="today-quiz-block" data-quiz-idx="${idx}">
+          <div class="today-quiz-options">${optsHtml}</div>
+          ${hintHtml}
+          <div class="today-quiz-result" hidden></div>
+        </div>
+      `;
+    }
+
+    // Video credit below poster
+    const videoCredit = (variation === 'video' && card.videoCredit)
+      ? `<div class="today-video-credit">${escapeAttr(card.videoCredit)}</div>`
+      : '';
+
+    // Primary CTA: Watch for video, Share for poster + quiz
+    const primaryBtn = (variation === 'video')
+      ? `<button class="card-cta-btn today-primary-btn today-watch-btn" onclick="handleCardCta(${idx})">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><polygon points="4,3 13,8 4,13" /></svg>
+          ${card.cta || 'Watch'}
+        </button>`
+      : `<button class="card-cta-btn today-primary-btn" onclick="handleCardCta(${idx})">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 2l3 3-3 3M14 5H7a4 4 0 0 0-4 4v3"/>
+          </svg>
+          ${card.cta || 'Share'}
+        </button>`;
+
+    const eyebrow = (card.eyebrow || '').trim();
+    const showSecondary = !(variation === 'quiz' && !card.secondaryCtaUrl);
+    return `
+      <div class="stack-card today-stack-card" data-idx="${idx}" style="${paletteStyle}">
+        <div class="card-body today-card-body">
+          <div class="today-poster-bleed ${posterClass}">
+            ${posterInner}
+            ${posterExtras}
+          </div>
+          <div class="today-text-block">
+            ${eyebrow ? `<span class="ttb-eyebrow">${escapeAttr(eyebrow)}</span>` : ''}
+            <div class="ttb-heading">${escapeAttr(heading)}</div>
+            ${subheading ? `<div class="ttb-sub">${escapeAttr(subheading)}</div>` : ''}
+          </div>
+          ${videoCredit}
+          ${quizBlock}
+        </div>
+        <div class="card-cta-row today-cta-row">
+          ${primaryBtn}
+          ${showSecondary ? `<button class="today-secondary-pill" onclick="handleSecondaryCta(${idx})">
+            ${secondary}
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px;"><path d="M5 3l5 5-5 5"/></svg>
+          </button>` : ''}
+        </div>
+        <div class="swipe-badge prev">BACK</div>
+        <div class="swipe-badge next">NEXT</div>
+      </div>
+    `;
+  }
+
   const hasHero = !!card.hasHeroImage;
   const isMilestone = card.component === 'milestone';
   const isVideo = card.component === 'video';
@@ -2939,6 +3642,69 @@ function renderCardHTML(card, idx) {
     `).join('')}</div>`;
   }
 
+  // Certificate medal flourish (Certificate template)
+  let certHeroHTML = '';
+  if (card.component === 'certificate') {
+    certHeroHTML = `
+      <div style="display:grid; place-items:center; margin-top:18px; margin-bottom:10px;">
+        <svg width="96" height="96" viewBox="0 0 72 72" fill="none">
+          <circle cx="36" cy="30" r="22" fill="var(--p-stat-bg)" stroke="var(--p-cta)" stroke-width="2.5"/>
+          <circle cx="36" cy="30" r="14" fill="none" stroke="var(--p-mid)" stroke-width="1.4"/>
+          <path d="M28 32l5 5 11-11" stroke="var(--p-cta)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M22 50l4 20 10-8 10 8 4-20" fill="var(--p-cta)" stroke="var(--p-dark)" stroke-width="1" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    `;
+  }
+
+  // Certificate stats (uses same .meta-row look as the Today meta strip)
+  let certStatsHTML = '';
+  if (card.certStats && card.certStats.length) {
+    certStatsHTML = `<div class="meta-row" style="margin-top:18px;">${card.certStats.map(s => `
+      <div class="meta-col">
+        <div class="meta-val">${s.value || '—'}</div>
+        <div class="meta-lbl">${s.label || ''}</div>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  // Feedback question dots (Feedback template)
+  let feedbackBlockHTML = '';
+  if (card.component === 'feedback') {
+    const qCount = card.questionCount || 3;
+    let dots = '';
+    for (let i = 0; i < qCount; i++) {
+      dots += `<div style="width:9px; height:9px; border-radius:50%; background:var(--p-mid);"></div>`;
+    }
+    feedbackBlockHTML = `
+      <div style="display:grid; place-items:center; margin-top:18px; margin-bottom:6px;">
+        <svg width="76" height="76" viewBox="0 0 60 60" fill="none">
+          <path d="M10 14h36a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H22l-8 8v-8h-4a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z" fill="var(--p-stat-bg)" stroke="var(--p-cta)" stroke-width="2.2"/>
+          <path d="M18 22h24M18 28h18M18 34h12" stroke="var(--p-mid)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div style="display:flex; gap:8px; justify-content:center; margin-top:12px;">${dots}</div>
+      <div style="text-align:center; margin-top:8px; font-size:11px; font-weight:700; letter-spacing:0.6px; color:var(--m-sub);">${qCount} QUICK QUESTIONS</div>
+    `;
+  }
+
+  // Tools "what you get" block — reuse bullets render; nothing extra needed.
+
+  // Monthly Calendar hero image — uses existing card-hero-img path via hasHeroImage flag.
+
+  // Monthly Calendar event list
+  let calEventsHTML = '';
+  if (card.calEvents && card.calEvents.length) {
+    calEventsHTML = `<div class="day-list">${card.calEvents.map(e => `
+      <div class="day-row">
+        <div class="day-row-title">
+          <span>${e.date || '—'} - ${e.name || 'Event'}</span>
+        </div>
+        ${e.expert ? `<div class="day-row-author">${e.expert}</div>` : ''}
+      </div>
+    `).join('')}</div>`;
+  }
+
   // CTA row
   let ctaHTML = '';
   if (card.cta) {
@@ -2954,6 +3720,12 @@ function renderCardHTML(card, idx) {
   const paletteKey = (story && story.palette) || 'blue';
   const paletteStyle = paletteStyleString(paletteKey);
 
+  // Centered text layout for certificate + feedback (single-card celebratory templates)
+  const isCentered = card.component === 'certificate' || card.component === 'feedback';
+  const centerStyle = isCentered ? ' style="text-align:center;"' : '';
+  const titleHTMLPositioned = card.title ? `<div class="card-title"${centerStyle}>${card.title}</div>` : '';
+  const subHTMLPositioned = card.sub ? `<div class="card-sub"${centerStyle}>${card.sub}</div>` : '';
+
   return `
     <div class="${cardClasses.join(' ')}" data-idx="${idx}" style="${paletteStyle}">
       <div class="card-body">
@@ -2961,16 +3733,20 @@ function renderCardHTML(card, idx) {
         <div class="card-pad">
           ${preHeaderHTML}
           ${pillHTML}
-          ${titleHTML}
-          ${subHTML}
+          ${certHeroHTML}
+          ${feedbackBlockHTML}
+          ${titleHTMLPositioned}
+          ${subHTMLPositioned}
           ${timeRowHTML}
           ${expertHTML}
           ${metaHTML}
+          ${certStatsHTML}
           ${bulletsHTML}
           ${dayListHTML}
           ${timelineHTML}
           ${arcHTML}
           ${nutritionHTML}
+          ${calEventsHTML}
           ${confirmHTML}
           ${promptsHTML}
           ${inlineLinkHTML}
@@ -3044,8 +3820,57 @@ function handleCardCta(idx) {
 }
 
 function handleSecondaryCta(idx) {
-  showToast('Saved');
+  const card = currentCards[idx];
+  const msg = (card && card.toastOnSecondary) || 'Saved';
+  showToast(msg);
   setTimeout(closeStack, 250);
+}
+
+function handleQuizOptionTap(idx, letter, btn) {
+  const card = currentCards[idx];
+  if (!card) return;
+  const block = btn && btn.closest('.today-quiz-block');
+  if (!block || block.classList.contains('is-locked')) return;
+  const isCorrect = (card.quizCorrect && letter === card.quizCorrect);
+  btn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+  if (!isCorrect && card.quizCorrect) {
+    const correctBtn = block.querySelector('.today-quiz-opt[data-letter="' + card.quizCorrect + '"]');
+    if (correctBtn) correctBtn.classList.add('is-correct');
+  }
+  block.classList.add('is-locked');
+  const result = block.querySelector('.today-quiz-result');
+  if (result) {
+    result.hidden = false;
+    result.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+    result.textContent = isCorrect
+      ? (card.quizCorrectMessage || 'Correct. Nice instinct.')
+      : (card.quizWrongMessage || ('Not quite. The correct answer is ' + card.quizCorrect + '.'));
+  }
+  const hintBtn = block.querySelector('.today-quiz-hint-btn');
+  if (hintBtn) hintBtn.style.display = 'none';
+}
+
+function toggleQuizHint(idx, btn) {
+  const wrap = btn && btn.closest('.today-quiz-hint-wrap');
+  if (!wrap) return;
+  const text = wrap.querySelector('.today-quiz-hint-text');
+  if (!text) return;
+  const isOpen = !text.hidden;
+  text.hidden = isOpen;
+  btn.classList.toggle('is-open', !isOpen);
+  btn.innerHTML = (isOpen
+    ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Show hint'
+    : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Hide hint');
+}
+
+/* Minimal HTML-attribute escape used by the today card renderer. */
+function escapeAttr(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 /* ============================================================
