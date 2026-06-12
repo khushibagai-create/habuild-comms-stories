@@ -4716,12 +4716,12 @@ function cardTabLabel(template, idx) {
   }
   const labels = {
     'today':            ['Poster'],
-    'daily-update':     ["Today's session", 'Deeper context'],
+    'daily-update':     ["Today's session", 'More details'],
     'multi-expert':     ['Hero', 'Lineup', 'Today'],
     'mass-event':       ['Hero', 'How to join'],
     'recovery':         ['Recording'],
     'certificate':      ['Certificate'],
-    'tools':            ['Tool hero', 'How it works'],
+    'tools':            ['Tool hero', 'More details'],
     'feedback':         ['Feedback'],
     'monthly-calendar': ['Calendar'],
     'live-session':     ['Live banner'],
@@ -5070,7 +5070,7 @@ function buildDailyUpdateStory2Fields(card) {
   });
   rowsHtml += '<button class="add-btn" onclick="addArrayItem(\'rich_bullets\', { heading: \'\', subheading: \'\' })">+ Add bullet</button>';
 
-  return sectionWrap('1', 'Deeper context', 'Top of Story 2',
+  return sectionWrap('1', 'More details', 'Top of Story 2',
     '<div class="field"><label>Heading</label><input class="input" data-field="heading" value="' + escapeAttr(card.heading) + '" placeholder="Why this matters" /></div>' +
     '<div class="field"><label>Subheading</label><textarea class="textarea" data-field="subheading" placeholder="A one-line elaboration of the heading.">' + escapeText(card.subheading) + '</textarea></div>'
   ) +
